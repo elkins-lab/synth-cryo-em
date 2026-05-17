@@ -31,8 +31,10 @@ synth-cryo-em structure.pdb output.mrc --resolution 3.5 --apply-physics --snr 5
 ## 📚 Tutorials
 Explore the project's functionality interactively via our Jupyter notebooks:
 
-- **[Interactive Physics & Visualization](notebooks/visual_tutorial.ipynb)**: Explore how resolution, noise (SNR), and CTF effects change the visual features of a map in 3D.
-- **[Core API Walkthrough](notebooks/interactive_tutorial.ipynb)**: A step-by-step guide to using the Python API for custom workflows.
+- **Interactive Physics & Visualization**: Explore how resolution, noise (SNR), and CTF effects change the visual features of a map in 3D.  
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-cryo-em/blob/main/notebooks/visual_tutorial.ipynb)
+- **Core API Walkthrough**: A step-by-step guide to using the Python API for custom workflows.  
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-cryo-em/blob/main/notebooks/interactive_tutorial.ipynb)
 
 ## 📖 Documentation
 For detailed guides and API reference, visit the [Documentation Site](https://elkins.github.io/synth-cryo-em/).

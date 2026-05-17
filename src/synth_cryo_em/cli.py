@@ -12,14 +12,15 @@ import numpy as np
 @click.option('--voltage', default=300.0, help='Acceleration voltage in kV')
 @click.option('--cs', default=2.7, help='Spherical aberration in mm')
 @click.option('--bfactor', default=0.0, help='Envelope B-factor')
+@click.option('--bfactors/--no-bfactors', default=False, help='Use atomic B-factors for local resolution')
 @click.option('--apply-physics/--no-physics', default=False, help='Apply CTF effects')
-def main(input_path, output_path, resolution, spacing, snr, defocus, voltage, cs, bfactor, apply_physics):
+def main(input_path, output_path, resolution, spacing, snr, defocus, voltage, cs, bfactor, bfactors, apply_physics):
     """
     Generate a synthetic Cryo-EM map from an atomic model (PDB, mmCIF, or BCIF).
     """
     click.echo(f"Generating map for {input_path} at {resolution}A resolution...")
     
-    grid, origin = generate_density_map(input_path, resolution, grid_spacing=spacing)
+    grid, origin = generate_density_map(input_path, resolution, grid_spacing=spacing, use_bfactors=bfactors)
     
     data = np.array(grid, copy=True)
     

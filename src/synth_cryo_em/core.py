@@ -3,13 +3,12 @@ import numpy as np
 import mrcfile
 from scipy.ndimage import gaussian_filter
 
-def generate_density_map(input_path, resolution, grid_spacing=None):
+def generate_density_map(input_path, resolution, grid_spacing=None, use_bfactors=False):
     """
     Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.
+    If use_bfactors is True, use atomic B-factors for local resolution.
     """
     st = gemmi.read_structure(input_path)
-    # st.setup_entities() # Not strictly necessary for density
-    
     # If grid_spacing is not provided, use a rule of thumb (resolution / 3 or 4)
     if grid_spacing is None:
         grid_spacing = resolution / 3.0
@@ -26,11 +25,9 @@ def generate_density_map(input_path, resolution, grid_spacing=None):
         raise ValueError("No atoms found in structure")
 
     positions = np.array(positions)
-    margin = resolution * 2.0 # Increased margin
+    margin = resolution * 2.0
     min_pos = positions.min(axis=0) - margin
     max_pos = positions.max(axis=0) + margin
-    size = max_pos - min_pos
-    
     size = max_pos - min_pos
     
     st_shifted = st.clone()
@@ -48,15 +45,27 @@ def generate_density_map(input_path, resolution, grid_spacing=None):
     # Map the atoms to the grid using DensityCalculatorE
     calc = gemmi.DensityCalculatorE()
     calc.d_min = resolution
-    # set_grid_cell_and_spacegroup will use the cell we set on st_shifted
     calc.set_grid_cell_and_spacegroup(st_shifted)
-    # If we want a specific spacing, we can set it
-    if grid_spacing:
-        # DensityCalculator might not allow direct spacing setting easily
-        # but it calculates it from d_min if not specified.
-        # Let's see if we can set rate
-        calc.rate = resolution / grid_spacing
-        
+    
+    # If use_bfactors is True, we use the atomic B-factors.
+    # Gemmi's DensityCalculatorE uses atomic B-factors by default 
+    # when calling put_model_density_on_grid.
+    # However, we can add a constant "base" blur to represent resolution.
+    # resolution (d) relates to B-factor roughly by B = 8 * pi^2 * (d/2)^2 = 2 * pi^2 * d^2
+    # But gemmi also uses d_min as a cutoff.
+    
+    if not use_bfactors:
+        # If not using B-factors, we set them all to 0 and use a global blur
+        # equivalent to the target resolution.
+        for model in st_shifted:
+            for chain in model:
+                for residue in chain:
+                    for atom in residue:
+                        atom.b_iso = 0.0
+        # Set a global blur to match the target resolution
+        # B = 8 * pi^2 * (res/2)^2 is roughly 20 * res^2 / 2
+        calc.blur = resolution**2 # Simplified relationship for synthetic maps
+    
     calc.initialize_grid()
     if len(st_shifted) > 0:
         calc.put_model_density_on_grid(st_shifted[0])

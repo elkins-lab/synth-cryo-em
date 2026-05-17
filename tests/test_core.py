@@ -61,6 +61,11 @@ END
             if os.path.exists(empty_pdb):
                 os.remove(empty_pdb)
 
+    def test_generate_with_bfactors(self):
+        grid, origin = generate_density_map(self.test_pdb, resolution=4.0, use_bfactors=True)
+        data = np.array(grid, copy=False)
+        self.assertGreater(np.sum(data), 0)
+
     def test_mmcif_support(self):
         import gemmi
         cif_path = "test_mmcif.cif"

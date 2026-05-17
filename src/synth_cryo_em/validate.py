@@ -1,7 +1,7 @@
 import click
 import mrcfile
 import numpy as np
-from .core import compute_fsc
+from .core import compute_fsc, compute_ccc
 
 @click.command()
 @click.argument('map1_path', type=click.Path(exists=True))
@@ -9,7 +9,7 @@ from .core import compute_fsc
 @click.option('--output', '-o', help='Path to save FSC data (CSV)')
 def main(map1_path, map2_path, output):
     """
-    Compare two Cryo-EM maps using Fourier Shell Correlation (FSC).
+    Compare two Cryo-EM maps using Fourier Shell Correlation (FSC) and CCC.
     """
     click.echo(f"Comparing {map1_path} and {map2_path}...")
     
@@ -24,7 +24,10 @@ def main(map1_path, map2_path, output):
 
         voxel_size = (v1.x, v1.y, v1.z)
         freqs, fsc = compute_fsc(d1, d2, voxel_size)
+        ccc = compute_ccc(d1, d2)
         
+    click.echo(f"\nOverall Cross-Correlation Coefficient (CCC): {ccc:.4f}\n")
+
     # Print some key values
     click.echo(f"{'Resolution (A)':<15} | {'FSC':<10}")
     click.echo("-" * 30)

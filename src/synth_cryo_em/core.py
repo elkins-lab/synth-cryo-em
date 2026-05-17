@@ -3,7 +3,7 @@ import numpy as np
 import mrcfile
 from scipy.ndimage import gaussian_filter
 
-def generate_density_map(input_path, resolution, grid_spacing=None, use_bfactors=False):
+def generate_density_map(input_path, resolution, grid_spacing=None, use_bfactors=False, margin=None):
     """
     Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.
     If use_bfactors is True, use atomic B-factors for local resolution.
@@ -25,7 +25,9 @@ def generate_density_map(input_path, resolution, grid_spacing=None, use_bfactors
         raise ValueError("No atoms found in structure")
 
     positions = np.array(positions)
-    margin = resolution * 2.0
+    if margin is None:
+        margin = resolution * 2.0
+    
     min_pos = positions.min(axis=0) - margin
     max_pos = positions.max(axis=0) + margin
     size = max_pos - min_pos
@@ -45,7 +47,14 @@ def generate_density_map(input_path, resolution, grid_spacing=None, use_bfactors
     # Map the atoms to the grid using DensityCalculatorE
     calc = gemmi.DensityCalculatorE()
     calc.d_min = resolution
+    
+    # Calculate sampling rate to match grid_spacing
+    # spacing = d_min / (2 * rate)  => rate = d_min / (2 * spacing)
+    calc.rate = resolution / (2.0 * grid_spacing)
+    
+    # Initialize grid
     calc.set_grid_cell_and_spacegroup(st_shifted)
+    calc.initialize_grid()
     
     # If use_bfactors is True, we use the atomic B-factors.
     # Gemmi's DensityCalculatorE uses atomic B-factors by default 
@@ -63,8 +72,8 @@ def generate_density_map(input_path, resolution, grid_spacing=None, use_bfactors
                     for atom in residue:
                         atom.b_iso = 0.0
         # Set a global blur to match the target resolution
-        # B = 8 * pi^2 * (res/2)^2 is roughly 20 * res^2 / 2
-        calc.blur = resolution**2 # Simplified relationship for synthetic maps
+        # A common heuristic is B = 8 * res^2 for synthetic maps
+        calc.blur = 8.0 * resolution**2
     
     calc.initialize_grid()
     if len(st_shifted) > 0:
@@ -186,6 +195,26 @@ def compute_fsc(data1, data2, voxel_size):
                 freqs.append((bins[i] + bins[i+1]) / 2.0)
                 
     return np.array(freqs), np.array(fsc)
+
+def compute_ccc(data1, data2):
+    """
+    Compute the Cross-Correlation Coefficient (CCC) between two 3D maps.
+    """
+    assert data1.shape == data2.shape
+    
+    # Flatten and remove mean
+    d1 = data1.ravel()
+    d2 = data2.ravel()
+    
+    d1 = d1 - np.mean(d1)
+    d2 = d2 - np.mean(d2)
+    
+    num = np.sum(d1 * d2)
+    den = np.sqrt(np.sum(d1**2) * np.sum(d2**2))
+    
+    if den == 0:
+        return 0.0
+    return num / den
 
 def save_mrc(data, output_path, origin=(0,0,0), spacing=(1,1,1)):
     """

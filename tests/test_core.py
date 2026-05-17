@@ -61,6 +61,33 @@ END
             if os.path.exists(empty_pdb):
                 os.remove(empty_pdb)
 
+    def test_mmcif_support(self):
+        import gemmi
+        cif_path = "test_mmcif.cif"
+        st = gemmi.Structure()
+        model = gemmi.Model("1")
+        chain = gemmi.Chain("A")
+        res = gemmi.Residue()
+        res.name = "ALA"
+        res.seqid = gemmi.SeqId(1, ' ')
+        atom = gemmi.Atom()
+        atom.name = "CA"
+        atom.element = gemmi.Element("C")
+        atom.pos = gemmi.Position(10, 10, 10)
+        res.add_atom(atom)
+        chain.add_residue(res)
+        model.add_chain(chain)
+        st.add_model(model)
+        st.make_mmcif_document().write_file(cif_path)
+        
+        try:
+            grid, origin = generate_density_map(cif_path, resolution=4.0)
+            data = np.array(grid, copy=False)
+            self.assertGreater(np.sum(data), 0)
+        finally:
+            if os.path.exists(cif_path):
+                os.remove(cif_path)
+
     def test_save_mrc(self):
         from synth_cryo_em.core import save_mrc
         import mrcfile

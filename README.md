@@ -1,6 +1,6 @@
 # synth-cryo-em
 
-[![Tests](https://github.com/georgeelkins/synth-cryo-em/actions/workflows/test.yml/badge.svg)](https://github.com/georgeelkins/synth-cryo-em/actions/workflows/test.yml)
+[![Tests](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://georgeelkins.github.io/synth-cryo-em/)
 
 A lightweight Pythonic utility to convert atomic models (PDB/CIF) into synthetic 3D Cryo-EM maps with realistic noise, CTF effects, and varying resolutions.
@@ -29,7 +29,7 @@ synth-cryo-em structure.pdb output.mrc --resolution 3.5 --apply-physics --snr 5
 ```
 
 ## 📚 Documentation
-For detailed guides and API reference, visit the [Documentation Site](https://georgeelkins.github.io/synth-cryo-em/).
+For detailed guides and API reference, visit the [Documentation Site](https://elkins.github.io/synth-cryo-em/).
 
 ## 🛠️ Development
 To install for development and documentation:

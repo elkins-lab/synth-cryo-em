@@ -22,6 +22,7 @@ docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
 
 [project.scripts]
 synth-cryo-em = "synth_cryo_em.cli:main"
+synth-cryo-em-validate = "synth_cryo_em.validate:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

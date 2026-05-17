@@ -1,0 +1,24 @@
+data_model
+_entry.id model
+
+_cell.entry_id model
+_cell.length_a 1
+_cell.length_b 1
+_cell.length_c 1
+_cell.angle_alpha 90
+_cell.angle_beta 90
+_cell.angle_gamma 90
+
+_symmetry.entry_id model
+_symmetry.space_group_name_H-M ''
+
+
+
+
+
+
+
+
+
+
+

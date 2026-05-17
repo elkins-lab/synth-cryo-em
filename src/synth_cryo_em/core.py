@@ -110,6 +110,74 @@ def apply_ctf(data, voxel_size, defoc=2.0, cs=2.7, voltage=300, amplitude_contra
     data_f *= ctf
     return np.real(np.fft.ifftn(data_f))
 
+def compute_fsc(data1, data2, voxel_size):
+    """
+    Compute the Fourier Shell Correlation (FSC) between two 3D maps.
+    Returns frequencies and correlation values.
+    """
+    assert data1.shape == data2.shape
+    
+    # Fourier transforms
+    f1 = np.fft.fftn(data1)
+    f2 = np.fft.fftn(data2)
+    
+    # Cross-spectral density
+    cross = f1 * np.conj(f2)
+    p1 = np.real(f1 * np.conj(f1))
+    p2 = np.real(f2 * np.conj(f2))
+    
+    # Calculate radial bins
+    nz, ny, nx = data1.shape
+    kz = np.fft.fftfreq(nz, d=voxel_size[2])
+    ky = np.fft.fftfreq(ny, d=voxel_size[1])
+    kx = np.fft.fftfreq(nx, d=voxel_size[0])
+    
+    Kz, Ky, Kx = np.meshgrid(kz, ky, kx, indexing='ij')
+    k = np.sqrt(Kz**2 + Ky**2 + Kx**2)
+    
+    # Flatten everything
+    k = k.ravel()
+    cross = cross.ravel()
+    p1 = p1.ravel()
+    p2 = p2.ravel()
+    
+    # Sort by frequency
+    idx = np.argsort(k)
+    k_sorted = k[idx]
+    cross_sorted = cross[idx]
+    p1_sorted = p1[idx]
+    p2_sorted = p2[idx]
+    
+    # Binning
+    n_bins = min(nx, ny, nz) // 2
+    bins = np.linspace(0, k_sorted.max(), n_bins + 1)
+    
+    fsc = []
+    freqs = []
+    
+    for i in range(n_bins):
+        mask = (k_sorted >= bins[i]) & (k_sorted < bins[i+1])
+        if np.any(mask):
+            c_bin = cross_sorted[mask]
+            p1_bin = p1_sorted[mask]
+            p2_bin = p2_sorted[mask]
+            
+            # Sum of cross power and individual powers
+            sum_cross = np.sum(c_bin)
+            sum_p1 = np.sum(p1_bin)
+            sum_p2 = np.sum(p2_bin)
+            
+            # FSC is real part of cross correlation / sqrt(power1 * power2)
+            # Standard definition uses the real part of the sum
+            num = np.real(sum_cross)
+            den = np.sqrt(sum_p1 * sum_p2)
+            
+            if den > 0:
+                fsc.append(num / den)
+                freqs.append((bins[i] + bins[i+1]) / 2.0)
+                
+    return np.array(freqs), np.array(fsc)
+
 def save_mrc(data, output_path, origin=(0,0,0), spacing=(1,1,1)):
     """
     Save numpy array to MRC file.

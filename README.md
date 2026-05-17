@@ -28,7 +28,13 @@ synth-cryo-em structure.pdb output.mrc --resolution 4.0
 synth-cryo-em structure.pdb output.mrc --resolution 3.5 --apply-physics --snr 5
 ```
 
-## 📚 Documentation
+## 📚 Tutorials
+Explore the project's functionality interactively via our Jupyter notebooks:
+
+- **[Interactive Physics & Visualization](notebooks/visual_tutorial.ipynb)**: Explore how resolution, noise (SNR), and CTF effects change the visual features of a map in 3D.
+- **[Core API Walkthrough](notebooks/interactive_tutorial.ipynb)**: A step-by-step guide to using the Python API for custom workflows.
+
+## 📖 Documentation
 For detailed guides and API reference, visit the [Documentation Site](https://elkins.github.io/synth-cryo-em/).
 
 ## 🛠️ Development

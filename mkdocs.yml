@@ -1,0 +1,14 @@
+site_name: synth-cryo-em
+theme:
+  name: material
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+
+nav:
+  - Home: index.md
+  - Usage: usage.md
+  - API Reference: api.md

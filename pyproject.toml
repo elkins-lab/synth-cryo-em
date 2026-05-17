@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "synth-cryo-em"
+version = "0.1.0"
+description = "Synthetic Cryo-EM map generator from PDB models"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "mrcfile",
+    "gemmi",
+    "scipy",
+    "click",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+docs = ["mkdocs", "mkdocs-material", "mkdocstrings[python]"]
+
+[project.scripts]
+synth-cryo-em = "synth_cryo_em.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

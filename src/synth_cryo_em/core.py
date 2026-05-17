@@ -3,11 +3,11 @@ import numpy as np
 import mrcfile
 from scipy.ndimage import gaussian_filter
 
-def generate_density_map(pdb_path, resolution, grid_spacing=None):
+def generate_density_map(input_path, resolution, grid_spacing=None):
     """
-    Generate a density map from a PDB file using gemmi.
+    Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.
     """
-    st = gemmi.read_structure(pdb_path)
+    st = gemmi.read_structure(input_path)
     # st.setup_entities() # Not strictly necessary for density
     
     # If grid_spacing is not provided, use a rule of thumb (resolution / 3 or 4)

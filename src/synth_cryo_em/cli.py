@@ -3,7 +3,7 @@ from .core import generate_density_map, add_gaussian_noise, save_mrc, apply_ctf
 import numpy as np
 
 @click.command()
-@click.argument('pdb_path', type=click.Path(exists=True))
+@click.argument('input_path', type=click.Path(exists=True))
 @click.argument('output_path', type=click.Path())
 @click.option('--resolution', '-r', default=4.0, help='Resolution in Angstroms')
 @click.option('--spacing', '-s', default=None, type=float, help='Grid spacing in Angstroms')
@@ -13,13 +13,13 @@ import numpy as np
 @click.option('--cs', default=2.7, help='Spherical aberration in mm')
 @click.option('--bfactor', default=0.0, help='Envelope B-factor')
 @click.option('--apply-physics/--no-physics', default=False, help='Apply CTF effects')
-def main(pdb_path, output_path, resolution, spacing, snr, defocus, voltage, cs, bfactor, apply_physics):
+def main(input_path, output_path, resolution, spacing, snr, defocus, voltage, cs, bfactor, apply_physics):
     """
-    Generate a synthetic Cryo-EM map from a PDB model.
+    Generate a synthetic Cryo-EM map from an atomic model (PDB, mmCIF, or BCIF).
     """
-    click.echo(f"Generating map for {pdb_path} at {resolution}A resolution...")
+    click.echo(f"Generating map for {input_path} at {resolution}A resolution...")
     
-    grid, origin = generate_density_map(pdb_path, resolution, grid_spacing=spacing)
+    grid, origin = generate_density_map(input_path, resolution, grid_spacing=spacing)
     
     data = np.array(grid, copy=True)
     

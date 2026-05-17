@@ -572,14 +572,14 @@
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/core.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">66</span>
-<span class="normal">67</span>
-<span class="normal">68</span>
-<span class="normal">69</span>
-<span class="normal">70</span>
-<span class="normal">71</span>
-<span class="normal">72</span>
-<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_gaussian_noise</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">snr</span><span class="p">):</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_gaussian_noise</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">snr</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Add Gaussian noise to the data based on desired SNR.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -613,16 +613,7 @@ b_factor: envelope function B-factor</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/core.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 75</span>
-<span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 84</span>
 <span class="normal"> 85</span>
 <span class="normal"> 86</span>
 <span class="normal"> 87</span>
@@ -649,7 +640,16 @@ b_factor: envelope function B-factor</p>
 <span class="normal">108</span>
 <span class="normal">109</span>
 <span class="normal">110</span>
-<span class="normal">111</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">apply_ctf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">,</span> <span class="n">defoc</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">cs</span><span class="o">=</span><span class="mf">2.7</span><span class="p">,</span> <span class="n">voltage</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">amplitude_contrast</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">b_factor</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">apply_ctf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">,</span> <span class="n">defoc</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">cs</span><span class="o">=</span><span class="mf">2.7</span><span class="p">,</span> <span class="n">voltage</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">amplitude_contrast</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">b_factor</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Apply a simple Contrast Transfer Function (CTF) to the 3D data.</span>
 <span class="sd">    defoc: defocus in micrometers</span>
@@ -709,16 +709,7 @@ Returns frequencies and correlation values.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/core.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">113</span>
-<span class="normal">114</span>
-<span class="normal">115</span>
-<span class="normal">116</span>
-<span class="normal">117</span>
-<span class="normal">118</span>
-<span class="normal">119</span>
-<span class="normal">120</span>
-<span class="normal">121</span>
-<span class="normal">122</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">122</span>
 <span class="normal">123</span>
 <span class="normal">124</span>
 <span class="normal">125</span>
@@ -775,7 +766,16 @@ Returns frequencies and correlation values.</p>
 <span class="normal">176</span>
 <span class="normal">177</span>
 <span class="normal">178</span>
-<span class="normal">179</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_fsc</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">):</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_fsc</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Fourier Shell Correlation (FSC) between two 3D maps.</span>
 <span class="sd">    Returns frequencies and correlation values.</span>
@@ -852,14 +852,15 @@ Returns frequencies and correlation values.</p>
 
 
 <h3 id="synth_cryo_em.core.generate_density_map" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">generate_density_map</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">generate_density_map</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_bfactors</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.</p>
+        <p>Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.
+If use_bfactors is True, use atomic B-factors for local resolution.</p>
 
 
             <details class="mkdocstrings-source">
@@ -922,13 +923,21 @@ Returns frequencies and correlation values.</p>
 <span class="normal">61</span>
 <span class="normal">62</span>
 <span class="normal">63</span>
-<span class="normal">64</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_density_map</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_density_map</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_bfactors</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.</span>
+<span class="sd">    If use_bfactors is True, use atomic B-factors for local resolution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">st</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">read_structure</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span>
-    <span class="c1"># st.setup_entities() # Not strictly necessary for density</span>
-
     <span class="c1"># If grid_spacing is not provided, use a rule of thumb (resolution / 3 or 4)</span>
     <span class="k">if</span> <span class="n">grid_spacing</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">grid_spacing</span> <span class="o">=</span> <span class="n">resolution</span> <span class="o">/</span> <span class="mf">3.0</span>
@@ -945,11 +954,9 @@ Returns frequencies and correlation values.</p>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No atoms found in structure&quot;</span><span class="p">)</span>
 
     <span class="n">positions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">positions</span><span class="p">)</span>
-    <span class="n">margin</span> <span class="o">=</span> <span class="n">resolution</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="c1"># Increased margin</span>
+    <span class="n">margin</span> <span class="o">=</span> <span class="n">resolution</span> <span class="o">*</span> <span class="mf">2.0</span>
     <span class="n">min_pos</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">margin</span>
     <span class="n">max_pos</span> <span class="o">=</span> <span class="n">positions</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">margin</span>
-    <span class="n">size</span> <span class="o">=</span> <span class="n">max_pos</span> <span class="o">-</span> <span class="n">min_pos</span>
-
     <span class="n">size</span> <span class="o">=</span> <span class="n">max_pos</span> <span class="o">-</span> <span class="n">min_pos</span>
 
     <span class="n">st_shifted</span> <span class="o">=</span> <span class="n">st</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
@@ -967,14 +974,26 @@ Returns frequencies and correlation values.</p>
     <span class="c1"># Map the atoms to the grid using DensityCalculatorE</span>
     <span class="n">calc</span> <span class="o">=</span> <span class="n">gemmi</span><span class="o">.</span><span class="n">DensityCalculatorE</span><span class="p">()</span>
     <span class="n">calc</span><span class="o">.</span><span class="n">d_min</span> <span class="o">=</span> <span class="n">resolution</span>
-    <span class="c1"># set_grid_cell_and_spacegroup will use the cell we set on st_shifted</span>
     <span class="n">calc</span><span class="o">.</span><span class="n">set_grid_cell_and_spacegroup</span><span class="p">(</span><span class="n">st_shifted</span><span class="p">)</span>
-    <span class="c1"># If we want a specific spacing, we can set it</span>
-    <span class="k">if</span> <span class="n">grid_spacing</span><span class="p">:</span>
-        <span class="c1"># DensityCalculator might not allow direct spacing setting easily</span>
-        <span class="c1"># but it calculates it from d_min if not specified.</span>
-        <span class="c1"># Let&#39;s see if we can set rate</span>
-        <span class="n">calc</span><span class="o">.</span><span class="n">rate</span> <span class="o">=</span> <span class="n">resolution</span> <span class="o">/</span> <span class="n">grid_spacing</span>
+
+    <span class="c1"># If use_bfactors is True, we use the atomic B-factors.</span>
+    <span class="c1"># Gemmi&#39;s DensityCalculatorE uses atomic B-factors by default </span>
+    <span class="c1"># when calling put_model_density_on_grid.</span>
+    <span class="c1"># However, we can add a constant &quot;base&quot; blur to represent resolution.</span>
+    <span class="c1"># resolution (d) relates to B-factor roughly by B = 8 * pi^2 * (d/2)^2 = 2 * pi^2 * d^2</span>
+    <span class="c1"># But gemmi also uses d_min as a cutoff.</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">use_bfactors</span><span class="p">:</span>
+        <span class="c1"># If not using B-factors, we set them all to 0 and use a global blur</span>
+        <span class="c1"># equivalent to the target resolution.</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">st_shifted</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chain</span> <span class="ow">in</span> <span class="n">model</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">residue</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">residue</span><span class="p">:</span>
+                        <span class="n">atom</span><span class="o">.</span><span class="n">b_iso</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="c1"># Set a global blur to match the target resolution</span>
+        <span class="c1"># B = 8 * pi^2 * (res/2)^2 is roughly 20 * res^2 / 2</span>
+        <span class="n">calc</span><span class="o">.</span><span class="n">blur</span> <span class="o">=</span> <span class="n">resolution</span><span class="o">**</span><span class="mi">2</span> <span class="c1"># Simplified relationship for synthetic maps</span>
 
     <span class="n">calc</span><span class="o">.</span><span class="n">initialize_grid</span><span class="p">()</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">st_shifted</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -1003,18 +1022,18 @@ Returns frequencies and correlation values.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/core.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">181</span>
-<span class="normal">182</span>
-<span class="normal">183</span>
-<span class="normal">184</span>
-<span class="normal">185</span>
-<span class="normal">186</span>
-<span class="normal">187</span>
-<span class="normal">188</span>
-<span class="normal">189</span>
-<span class="normal">190</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">190</span>
 <span class="normal">191</span>
-<span class="normal">192</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_mrc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">spacing</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)):</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_mrc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">spacing</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Save numpy array to MRC file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1076,7 +1095,7 @@ Returns frequencies and correlation values.</p>
 
 
 <h3 id="synth_cryo_em.cli.main" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">main</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">defocus</span><span class="p">,</span> <span class="n">voltage</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="n">bfactor</span><span class="p">,</span> <span class="n">apply_physics</span><span class="p">)</span></code>
+            <code class="highlight language-python"><span class="n">main</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">defocus</span><span class="p">,</span> <span class="n">voltage</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="n">bfactor</span><span class="p">,</span> <span class="n">bfactors</span><span class="p">,</span> <span class="n">apply_physics</span><span class="p">)</span></code>
 
 </h3>
 
@@ -1122,7 +1141,8 @@ Returns frequencies and correlation values.</p>
 <span class="normal">36</span>
 <span class="normal">37</span>
 <span class="normal">38</span>
-<span class="normal">39</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="normal">39</span>
+<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">&#39;input_path&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">&#39;output_path&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">())</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--resolution&#39;</span><span class="p">,</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Resolution in Angstroms&#39;</span><span class="p">)</span>
@@ -1132,14 +1152,15 @@ Returns frequencies and correlation values.</p>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--voltage&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Acceleration voltage in kV&#39;</span><span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cs&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">2.7</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Spherical aberration in mm&#39;</span><span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--bfactor&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Envelope B-factor&#39;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--bfactors/--no-bfactors&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Use atomic B-factors for local resolution&#39;</span><span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--apply-physics/--no-physics&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Apply CTF effects&#39;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">defocus</span><span class="p">,</span> <span class="n">voltage</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="n">bfactor</span><span class="p">,</span> <span class="n">apply_physics</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">defocus</span><span class="p">,</span> <span class="n">voltage</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="n">bfactor</span><span class="p">,</span> <span class="n">bfactors</span><span class="p">,</span> <span class="n">apply_physics</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a synthetic Cryo-EM map from an atomic model (PDB, mmCIF, or BCIF).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generating map for </span><span class="si">{</span><span class="n">input_path</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">resolution</span><span class="si">}</span><span class="s2">A resolution...&quot;</span><span class="p">)</span>
 
-    <span class="n">grid</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">generate_density_map</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">)</span>
+    <span class="n">grid</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">generate_density_map</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">,</span> <span class="n">use_bfactors</span><span class="o">=</span><span class="n">bfactors</span><span class="p">)</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 

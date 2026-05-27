@@ -594,14 +594,14 @@
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/core.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">84</span>
-<span class="normal">85</span>
-<span class="normal">86</span>
-<span class="normal">87</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">87</span>
 <span class="normal">88</span>
 <span class="normal">89</span>
 <span class="normal">90</span>
-<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_gaussian_noise</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">snr</span><span class="p">):</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_gaussian_noise</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">snr</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Add Gaussian noise to the data based on desired SNR.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -635,11 +635,7 @@ b_factor: envelope function B-factor</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/core.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 97</span>
 <span class="normal"> 98</span>
 <span class="normal"> 99</span>
 <span class="normal">100</span>
@@ -671,7 +667,15 @@ b_factor: envelope function B-factor</p>
 <span class="normal">126</span>
 <span class="normal">127</span>
 <span class="normal">128</span>
-<span class="normal">129</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">apply_ctf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">,</span> <span class="n">defoc</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">cs</span><span class="o">=</span><span class="mf">2.7</span><span class="p">,</span> <span class="n">voltage</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">amplitude_contrast</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">b_factor</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">apply_ctf</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">,</span> <span class="n">defoc</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">cs</span><span class="o">=</span><span class="mf">2.7</span><span class="p">,</span> <span class="n">voltage</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">amplitude_contrast</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">b_factor</span><span class="o">=</span><span class="mf">0.0</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Apply a simple Contrast Transfer Function (CTF) to the 3D data.</span>
 <span class="sd">    defoc: defocus in micrometers</span>
@@ -680,9 +684,9 @@ b_factor: envelope function B-factor</p>
 <span class="sd">    b_factor: envelope function B-factor</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Constants</span>
-    <span class="n">wl</span> <span class="o">=</span> <span class="mf">12.26</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">voltage</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">+</span> <span class="mf">0.9784</span> <span class="o">*</span> <span class="n">voltage</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># wavelength in Angstroms</span>
-    <span class="n">cs_a</span> <span class="o">=</span> <span class="n">cs</span> <span class="o">*</span> <span class="mf">1e7</span> <span class="c1"># cs in Angstroms</span>
-    <span class="n">defoc_a</span> <span class="o">=</span> <span class="n">defoc</span> <span class="o">*</span> <span class="mi">10000</span> <span class="c1"># defocus in Angstroms</span>
+    <span class="n">wl</span> <span class="o">=</span> <span class="mf">12.26</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">voltage</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">+</span> <span class="mf">0.9784</span> <span class="o">*</span> <span class="n">voltage</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># wavelength in Angstroms</span>
+    <span class="n">cs_a</span> <span class="o">=</span> <span class="n">cs</span> <span class="o">*</span> <span class="mf">1e7</span>  <span class="c1"># cs in Angstroms</span>
+    <span class="n">defoc_a</span> <span class="o">=</span> <span class="n">defoc</span> <span class="o">*</span> <span class="mi">10000</span>  <span class="c1"># defocus in Angstroms</span>
 
     <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
     <span class="c1"># Frequencies</span>
@@ -690,14 +694,14 @@ b_factor: envelope function B-factor</p>
     <span class="n">ky</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">kx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="n">Kz</span><span class="p">,</span> <span class="n">Ky</span><span class="p">,</span> <span class="n">Kx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">kz</span><span class="p">,</span> <span class="n">ky</span><span class="p">,</span> <span class="n">kx</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+    <span class="n">Kz</span><span class="p">,</span> <span class="n">Ky</span><span class="p">,</span> <span class="n">Kx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">kz</span><span class="p">,</span> <span class="n">ky</span><span class="p">,</span> <span class="n">kx</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
     <span class="n">k2</span> <span class="o">=</span> <span class="n">Kz</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">Ky</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">Kx</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="c1"># Phase shift</span>
     <span class="n">chi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">wl</span> <span class="o">*</span> <span class="n">k2</span> <span class="o">*</span> <span class="p">(</span><span class="n">defoc_a</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">wl</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">k2</span> <span class="o">*</span> <span class="n">cs_a</span><span class="p">)</span>
 
     <span class="c1"># CTF</span>
-    <span class="n">ctf</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">amplitude_contrast</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">chi</span><span class="p">)</span> <span class="o">+</span> <span class="n">amplitude_contrast</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">chi</span><span class="p">))</span>
+    <span class="n">ctf</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">amplitude_contrast</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">chi</span><span class="p">)</span> <span class="o">+</span> <span class="n">amplitude_contrast</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">chi</span><span class="p">))</span>
 
     <span class="c1"># Envelope function</span>
     <span class="k">if</span> <span class="n">b_factor</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -730,15 +734,7 @@ b_factor: envelope function B-factor</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/core.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">199</span>
-<span class="normal">200</span>
-<span class="normal">201</span>
-<span class="normal">202</span>
-<span class="normal">203</span>
-<span class="normal">204</span>
-<span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">207</span>
 <span class="normal">208</span>
 <span class="normal">209</span>
 <span class="normal">210</span>
@@ -748,7 +744,15 @@ b_factor: envelope function B-factor</p>
 <span class="normal">214</span>
 <span class="normal">215</span>
 <span class="normal">216</span>
-<span class="normal">217</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_ccc</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">):</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_ccc</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Cross-Correlation Coefficient (CCC) between two 3D maps.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -790,14 +794,7 @@ Returns frequencies and correlation values.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/core.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
-<span class="normal">132</span>
-<span class="normal">133</span>
-<span class="normal">134</span>
-<span class="normal">135</span>
-<span class="normal">136</span>
-<span class="normal">137</span>
-<span class="normal">138</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">138</span>
 <span class="normal">139</span>
 <span class="normal">140</span>
 <span class="normal">141</span>
@@ -856,7 +853,14 @@ Returns frequencies and correlation values.</p>
 <span class="normal">194</span>
 <span class="normal">195</span>
 <span class="normal">196</span>
-<span class="normal">197</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_fsc</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">):</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute_fsc</span><span class="p">(</span><span class="n">data1</span><span class="p">,</span> <span class="n">data2</span><span class="p">,</span> <span class="n">voxel_size</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the Fourier Shell Correlation (FSC) between two 3D maps.</span>
 <span class="sd">    Returns frequencies and correlation values.</span>
@@ -878,7 +882,7 @@ Returns frequencies and correlation values.</p>
     <span class="n">ky</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">ny</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="n">kx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="n">voxel_size</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="n">Kz</span><span class="p">,</span> <span class="n">Ky</span><span class="p">,</span> <span class="n">Kx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">kz</span><span class="p">,</span> <span class="n">ky</span><span class="p">,</span> <span class="n">kx</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s1">&#39;ij&#39;</span><span class="p">)</span>
+    <span class="n">Kz</span><span class="p">,</span> <span class="n">Ky</span><span class="p">,</span> <span class="n">Kx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">kz</span><span class="p">,</span> <span class="n">ky</span><span class="p">,</span> <span class="n">kx</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
     <span class="n">k</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Kz</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">Ky</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">Kx</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="c1"># Flatten everything</span>
@@ -902,7 +906,7 @@ Returns frequencies and correlation values.</p>
     <span class="n">freqs</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_bins</span><span class="p">):</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">k_sorted</span> <span class="o">&gt;=</span> <span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">k_sorted</span> <span class="o">&lt;</span> <span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">k_sorted</span> <span class="o">&gt;=</span> <span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">k_sorted</span> <span class="o">&lt;</span> <span class="n">bins</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
             <span class="n">c_bin</span> <span class="o">=</span> <span class="n">cross_sorted</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
             <span class="n">p1_bin</span> <span class="o">=</span> <span class="n">p1_sorted</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
@@ -920,7 +924,7 @@ Returns frequencies and correlation values.</p>
 
             <span class="k">if</span> <span class="n">den</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">fsc</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">den</span><span class="p">)</span>
-                <span class="n">freqs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+                <span class="n">freqs</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">bins</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">bins</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">freqs</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fsc</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -1022,7 +1026,11 @@ If use_bfactors is True, use atomic B-factors for local resolution.</p>
 <span class="normal">79</span>
 <span class="normal">80</span>
 <span class="normal">81</span>
-<span class="normal">82</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_density_map</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_bfactors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">generate_density_map</span><span class="p">(</span>
+    <span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_bfactors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.</span>
 <span class="sd">    If use_bfactors is True, use atomic B-factors for local resolution.</span>
@@ -1076,7 +1084,7 @@ If use_bfactors is True, use atomic B-factors for local resolution.</p>
     <span class="n">calc</span><span class="o">.</span><span class="n">initialize_grid</span><span class="p">()</span>
 
     <span class="c1"># If use_bfactors is True, we use the atomic B-factors.</span>
-    <span class="c1"># Gemmi&#39;s DensityCalculatorE uses atomic B-factors by default </span>
+    <span class="c1"># Gemmi&#39;s DensityCalculatorE uses atomic B-factors by default</span>
     <span class="c1"># when calling put_model_density_on_grid.</span>
     <span class="c1"># However, we can add a constant &quot;base&quot; blur to represent resolution.</span>
     <span class="c1"># resolution (d) relates to B-factor roughly by B = 8 * pi^2 * (d/2)^2 = 2 * pi^2 * d^2</span>
@@ -1121,18 +1129,18 @@ If use_bfactors is True, use atomic B-factors for local resolution.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/core.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">219</span>
-<span class="normal">220</span>
-<span class="normal">221</span>
-<span class="normal">222</span>
-<span class="normal">223</span>
-<span class="normal">224</span>
-<span class="normal">225</span>
-<span class="normal">226</span>
-<span class="normal">227</span>
-<span class="normal">228</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">228</span>
 <span class="normal">229</span>
-<span class="normal">230</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_mrc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">spacing</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)):</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">save_mrc</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">spacing</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Save numpy array to MRC file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1206,9 +1214,7 @@ If use_bfactors is True, use atomic B-factors for local resolution.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>synth_cryo_em/cli.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 7</span>
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
 <span class="normal">10</span>
@@ -1241,25 +1247,61 @@ If use_bfactors is True, use atomic B-factors for local resolution.</p>
 <span class="normal">37</span>
 <span class="normal">38</span>
 <span class="normal">39</span>
-<span class="normal">40</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">&#39;input_path&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s1">&#39;output_path&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">())</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--resolution&#39;</span><span class="p">,</span> <span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Resolution in Angstroms&#39;</span><span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--spacing&#39;</span><span class="p">,</span> <span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Grid spacing in Angstroms&#39;</span><span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--snr&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Signal-to-noise ratio&#39;</span><span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--defocus&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Defocus in micrometers&#39;</span><span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--voltage&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Acceleration voltage in kV&#39;</span><span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--cs&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">2.7</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Spherical aberration in mm&#39;</span><span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--bfactor&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Envelope B-factor&#39;</span><span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--bfactors/--no-bfactors&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Use atomic B-factors for local resolution&#39;</span><span class="p">)</span>
-<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s1">&#39;--apply-physics/--no-physics&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Apply CTF effects&#39;</span><span class="p">)</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">spacing</span><span class="p">,</span> <span class="n">snr</span><span class="p">,</span> <span class="n">defocus</span><span class="p">,</span> <span class="n">voltage</span><span class="p">,</span> <span class="n">cs</span><span class="p">,</span> <span class="n">bfactor</span><span class="p">,</span> <span class="n">bfactors</span><span class="p">,</span> <span class="n">apply_physics</span><span class="p">):</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@click</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;input_path&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">argument</span><span class="p">(</span><span class="s2">&quot;output_path&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">click</span><span class="o">.</span><span class="n">Path</span><span class="p">())</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--resolution&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Resolution in Angstroms&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--spacing&quot;</span><span class="p">,</span> <span class="s2">&quot;-s&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Grid spacing in Angstroms&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--snr&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Signal-to-noise ratio&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--defocus&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Defocus in micrometers&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--voltage&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Acceleration voltage in kV&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--cs&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">2.7</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Spherical aberration in mm&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--bfactor&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Envelope B-factor&quot;</span><span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span>
+    <span class="s2">&quot;--bfactors/--no-bfactors&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Use atomic B-factors for local resolution&quot;</span>
+<span class="p">)</span>
+<span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--apply-physics/--no-physics&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Apply CTF effects&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+    <span class="n">input_path</span><span class="p">,</span>
+    <span class="n">output_path</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="p">,</span>
+    <span class="n">spacing</span><span class="p">,</span>
+    <span class="n">snr</span><span class="p">,</span>
+    <span class="n">defocus</span><span class="p">,</span>
+    <span class="n">voltage</span><span class="p">,</span>
+    <span class="n">cs</span><span class="p">,</span>
+    <span class="n">bfactor</span><span class="p">,</span>
+    <span class="n">bfactors</span><span class="p">,</span>
+    <span class="n">apply_physics</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generate a synthetic Cryo-EM map from an atomic model (PDB, mmCIF, or BCIF).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generating map for </span><span class="si">{</span><span class="n">input_path</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">resolution</span><span class="si">}</span><span class="s2">A resolution...&quot;</span><span class="p">)</span>
 
-    <span class="n">grid</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">generate_density_map</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">,</span> <span class="n">use_bfactors</span><span class="o">=</span><span class="n">bfactors</span><span class="p">)</span>
+    <span class="n">grid</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="n">generate_density_map</span><span class="p">(</span>
+        <span class="n">input_path</span><span class="p">,</span> <span class="n">resolution</span><span class="p">,</span> <span class="n">grid_spacing</span><span class="o">=</span><span class="n">spacing</span><span class="p">,</span> <span class="n">use_bfactors</span><span class="o">=</span><span class="n">bfactors</span>
+    <span class="p">)</span>
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -1268,7 +1310,9 @@ If use_bfactors is True, use atomic B-factors for local resolution.</p>
     <span class="n">vox_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">a</span> <span class="o">/</span> <span class="n">grid</span><span class="o">.</span><span class="n">nu</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">b</span> <span class="o">/</span> <span class="n">grid</span><span class="o">.</span><span class="n">nv</span><span class="p">,</span> <span class="n">uc</span><span class="o">.</span><span class="n">c</span> <span class="o">/</span> <span class="n">grid</span><span class="o">.</span><span class="n">nw</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">apply_physics</span><span class="p">:</span>
-        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Applying CTF (defocus=</span><span class="si">{</span><span class="n">defocus</span><span class="si">}</span><span class="s2">um, voltage=</span><span class="si">{</span><span class="n">voltage</span><span class="si">}</span><span class="s2">kV, B-factor=</span><span class="si">{</span><span class="n">bfactor</span><span class="si">}</span><span class="s2">)...&quot;</span><span class="p">)</span>
+        <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Applying CTF (defocus=</span><span class="si">{</span><span class="n">defocus</span><span class="si">}</span><span class="s2">um, voltage=</span><span class="si">{</span><span class="n">voltage</span><span class="si">}</span><span class="s2">kV, B-factor=</span><span class="si">{</span><span class="n">bfactor</span><span class="si">}</span><span class="s2">)...&quot;</span>
+        <span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">apply_ctf</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">vox_size</span><span class="p">,</span> <span class="n">defoc</span><span class="o">=</span><span class="n">defocus</span><span class="p">,</span> <span class="n">cs</span><span class="o">=</span><span class="n">cs</span><span class="p">,</span> <span class="n">voltage</span><span class="o">=</span><span class="n">voltage</span><span class="p">,</span> <span class="n">b_factor</span><span class="o">=</span><span class="n">bfactor</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">snr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

@@ -25,7 +25,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "numpy",
+    "numpy<2.0.0",
     "mrcfile",
     "gemmi",
     "scipy",

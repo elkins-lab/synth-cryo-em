@@ -1,13 +1,16 @@
-import unittest
 import os
+import unittest
+
 import numpy as np
-from synth_cryo_em.core import generate_density_map, apply_ctf, add_gaussian_noise
+
+from synth_cryo_em.core import add_gaussian_noise, apply_ctf, generate_density_map
+
 
 class TestSynthCryoEM(unittest.TestCase):
     def setUp(self):
-        self.pdb_content = """ATOM      1  N   ALA A   1      11.104   6.132  11.469  1.00 20.00           N  
-ATOM      2  CA  ALA A   1      12.000  12.000  12.000  1.00 20.00           C  
-ATOM      3  C   ALA A   1      13.104  18.132  13.469  1.00 20.00           C  
+        self.pdb_content = """ATOM      1  N   ALA A   1      11.104   6.132  11.469  1.00 20.00           N
+ATOM      2  CA  ALA A   1      12.000  12.000  12.000  1.00 20.00           C
+ATOM      3  C   ALA A   1      13.104  18.132  13.469  1.00 20.00           C
 TER
 END
 """
@@ -68,13 +71,14 @@ END
 
     def test_mmcif_support(self):
         import gemmi
+
         cif_path = "test_mmcif.cif"
         st = gemmi.Structure()
         model = gemmi.Model("1")
         chain = gemmi.Chain("A")
         res = gemmi.Residue()
         res.name = "ALA"
-        res.seqid = gemmi.SeqId(1, ' ')
+        res.seqid = gemmi.SeqId(1, " ")
         atom = gemmi.Atom()
         atom.name = "CA"
         atom.element = gemmi.Element("C")
@@ -84,7 +88,7 @@ END
         model.add_chain(chain)
         st.add_model(model)
         st.make_mmcif_document().write_file(cif_path)
-        
+
         try:
             grid, origin = generate_density_map(cif_path, resolution=4.0)
             data = np.array(grid, copy=False)
@@ -94,8 +98,10 @@ END
                 os.remove(cif_path)
 
     def test_save_mrc(self):
-        from synth_cryo_em.core import save_mrc
         import mrcfile
+
+        from synth_cryo_em.core import save_mrc
+
         data = np.zeros((10, 10, 10), dtype=np.float32)
         test_mrc = "test_output.mrc"
         try:
@@ -109,5 +115,6 @@ END
             if os.path.exists(test_mrc):
                 os.remove(test_mrc)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

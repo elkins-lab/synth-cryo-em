@@ -1,7 +1,12 @@
 # synth-cryo-em
 
+[![PyPI version](https://img.shields.io/pypi/v/synth-cryo-em.svg)](https://pypi.org/project/synth-cryo-em/)
+[![Python](https://img.shields.io/pypi/pyversions/synth-cryo-em.svg)](https://pypi.org/project/synth-cryo-em/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://elkins.github.io/synth-cryo-em/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Checked with mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](https://mypy-lang.org/)
 
 A lightweight Pythonic utility to convert atomic models (PDB/CIF) into synthetic 3D Cryo-EM maps with realistic noise, CTF effects, and varying resolutions.
 
@@ -53,4 +58,34 @@ pytest tests/
 Build docs locally:
 ```bash
 mkdocs serve
+```
+
+## Related Projects
+
+This library is part of the **synth-pdb ecosystem**:
+
+- [synth-pdb](https://github.com/elkins/synth-pdb) — Core protein structure generator
+- [synth-nmr](https://github.com/elkins/synth-nmr) — NMR observables simulator
+- [synth-saxs](https://github.com/elkins/synth-saxs) — SAXS profile simulator
+- [synth-dynamics](https://github.com/georgeelkins/synth-dynamics) — ANM/Langevin dynamics engine
+- [diff-biophys](https://github.com/elkins/diff-biophys) — Differentiable JAX biophysics kernels
+
+## Contributing
+
+Contributions are welcome! Please open an issue or pull request on [GitHub](https://github.com/elkins/synth-cryo-em). Run `pre-commit run --all-files` before submitting.
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+## Citation
+
+```bibtex
+@software{synth_cryo_em,
+  author  = {Elkins, George},
+  title   = {synth-cryo-em: Synthetic cryo-EM map generation from atomic models},
+  year    = {2024},
+  url     = {https://github.com/elkins/synth-cryo-em},
+  version = {0.1.0}
+}
 ```

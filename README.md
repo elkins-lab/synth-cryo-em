@@ -26,6 +26,13 @@
 pip install synth-cryo-em
 ```
 
+## 📖 Tutorials
+
+Get started immediately with our interactive Jupyter notebooks:
+
+*   **[Quick Start: Synthetic Cryo-EM Density Generation](notebooks/quickstart_cryo_em.ipynb)**: Learn how to generate density maps from PDB structures at varying resolutions.
+    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-cryo-em/blob/main/notebooks/quickstart_cryo_em.ipynb)
+
 ## 📜 License
 
 Distributed under the MIT License. See `LICENSE` for more information.

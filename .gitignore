@@ -46,7 +46,8 @@ nosetests.xml
 coverage.xml
 *.cover
 *.py,cover
-. Greenland/
+.coverage
+.coverage.*
 .pytest_cache/
 pytestdebug.log
 

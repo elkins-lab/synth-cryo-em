@@ -42,6 +42,8 @@ def generate_density_map(
     size = max_pos - min_pos
 
     st_shifted = st.clone()
+    # Ensure spacegroup is P1 for the synthetic box to avoid incorrect symmetry applications
+    st_shifted.spacegroup_hm = "P1"
     cell = gemmi.UnitCell(size[0], size[1], size[2], 90, 90, 90)
     st_shifted.cell = cell
 
@@ -63,7 +65,6 @@ def generate_density_map(
 
     # Initialize grid
     calc.set_grid_cell_and_spacegroup(st_shifted)
-    calc.initialize_grid()
 
     # If use_bfactors is True, we use the atomic B-factors.
     # Gemmi's DensityCalculatorE uses atomic B-factors by default
@@ -149,8 +150,8 @@ def apply_ctf(
 
 
 def compute_fsc(
-    data1: npt.NDArray[np.float64],
-    data2: npt.NDArray[np.float64],
+    data1: npt.NDArray[Any],
+    data2: npt.NDArray[Any],
     voxel_size: tuple[float, float, float],
 ) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     """
@@ -159,9 +160,9 @@ def compute_fsc(
     """
     assert data1.shape == data2.shape
 
-    # Fourier transforms
-    f1 = np.fft.fftn(data1)
-    f2 = np.fft.fftn(data2)
+    # Fourier transforms in float64 for precision
+    f1 = np.fft.fftn(data1.astype(np.float64))
+    f2 = np.fft.fftn(data2.astype(np.float64))
 
     # Cross-spectral density
     cross = f1 * np.conj(f2)
@@ -204,32 +205,33 @@ def compute_fsc(
             p1_bin = p1_sorted[mask]
             p2_bin = p2_sorted[mask]
 
-            # Sum of cross power and individual powers
+            # Sum of cross power and individual powers (using float64 accumulation)
             sum_cross = np.sum(c_bin)
             sum_p1 = np.sum(p1_bin)
             sum_p2 = np.sum(p2_bin)
 
             # FSC is real part of cross correlation / sqrt(power1 * power2)
-            # Standard definition uses the real part of the sum
             num = np.real(sum_cross)
             den = np.sqrt(sum_p1 * sum_p2)
 
             if den > 0:
-                fsc.append(num / den)
+                # Clamp to [-1, 1] to avoid numerical issues
+                val = num / den
+                fsc.append(np.clip(val, -1.0, 1.0))
                 freqs.append((bins[i] + bins[i + 1]) / 2.0)
 
-    return np.array(freqs), np.array(fsc)
+    return np.array(freqs, dtype=np.float64), np.array(fsc, dtype=np.float64)
 
 
-def compute_ccc(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]) -> float:
+def compute_ccc(data1: npt.NDArray[Any], data2: npt.NDArray[Any]) -> float:
     """
     Compute the Cross-Correlation Coefficient (CCC) between two 3D maps.
     """
     assert data1.shape == data2.shape
 
-    # Flatten and remove mean
-    d1 = data1.ravel()
-    d2 = data2.ravel()
+    # Flatten and convert to float64 for precision
+    d1 = data1.astype(np.float64).ravel()
+    d2 = data2.astype(np.float64).ravel()
 
     d1 = d1 - np.mean(d1)
     d2 = d2 - np.mean(d2)
@@ -239,7 +241,7 @@ def compute_ccc(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]) 
 
     if den == 0:
         return 0.0
-    return float(num / den)
+    return float(np.clip(num / den, -1.0, 1.0))
 
 
 def save_mrc(

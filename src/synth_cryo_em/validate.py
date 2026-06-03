@@ -5,32 +5,14 @@ import numpy as np
 from .core import compute_ccc, compute_fsc
 
 
-@click.command()
-@click.argument("map1_path", type=click.Path(exists=True))
-@click.argument("map2_path", type=click.Path(exists=True))
-@click.option("--output", "-o", help="Path to save FSC data (CSV)")
-def main(map1_path: str, map2_path: str, output: str | None) -> None:
+def compute_and_report_fsc(
+    freqs: np.ndarray, fsc: np.ndarray, ccc: float, output: str | None = None
+) -> None:
     """
-    Compare two Cryo-EM maps using Fourier Shell Correlation (FSC) and CCC.
+    Report FSC and CCC results to the console and optionally to a file.
     """
-    click.echo(f"Comparing {map1_path} and {map2_path}...")
-
-    with mrcfile.open(map1_path) as m1, mrcfile.open(map2_path) as m2:
-        d1 = m1.data
-        d2 = m2.data
-        v1 = m1.voxel_size
-
-        if d1.shape != d2.shape:
-            click.echo("Error: Maps have different shapes. Resampling not yet supported.", err=True)
-            return
-
-        voxel_size = (v1.x, v1.y, v1.z)
-        freqs, fsc = compute_fsc(d1, d2, voxel_size)
-        ccc = compute_ccc(d1, d2)
-
-    click.echo(f"\nOverall Cross-Correlation Coefficient (CCC): {ccc:.4f}\n")
-
-    # Print some key values
+    click.echo(f"Overall Cross-Correlation Coefficient (CCC): {ccc:.4f}")
+    click.echo("\nFSC Summary:")
     click.echo(f"{'Resolution (A)':<15} | {'FSC':<10}")
     click.echo("-" * 30)
 
@@ -50,6 +32,28 @@ def main(map1_path: str, map2_path: str, output: str | None) -> None:
     if output:
         np.savetxt(output, np.column_stack((freqs, fsc)), delimiter=",", header="frequency,fsc")
         click.echo(f"\nFSC data saved to {output}")
+
+
+@click.command()
+@click.argument("map1_path", type=click.Path(exists=True))
+@click.argument("map2_path", type=click.Path(exists=True))
+@click.option("--output", "-o", help="Path to save FSC data (CSV)")
+def main(map1_path: str, map2_path: str, output: str | None) -> None:
+    """
+    Compare two Cryo-EM maps using Fourier Shell Correlation (FSC) and CCC.
+    """
+    with mrcfile.open(map1_path) as m1, mrcfile.open(map2_path) as m2:
+        data1 = m1.data
+        data2 = m2.data
+        if data1.shape != data2.shape:
+            click.echo(f"Error: Maps have different shapes {data1.shape} vs {data2.shape}")
+            return
+        voxel_size = (m1.voxel_size.z, m1.voxel_size.y, m1.voxel_size.x)
+
+    ccc = compute_ccc(data1, data2)
+    freqs, fsc = compute_fsc(data1, data2, voxel_size)
+
+    compute_and_report_fsc(freqs, fsc, ccc, output)
 
 
 if __name__ == "__main__":

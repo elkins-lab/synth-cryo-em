@@ -15,8 +15,14 @@ class TestRealDataValidation(unittest.TestCase):
     Validation against real empirical data from PDB and EMDB.
     """
 
+    pdb_id: str
+    emdb_id: str
+    pdb_path: str | None
+    mrc_gz_path: str | None
+    mrc_path: str | None
+
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         cls.pdb_id = "6k7v"
         cls.emdb_id = "9943"
         cls.pdb_path = f"{cls.pdb_id}.pdb"
@@ -45,14 +51,14 @@ class TestRealDataValidation(unittest.TestCase):
                 cls.mrc_path = None
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         for p in [cls.pdb_path, cls.mrc_gz_path, cls.mrc_path]:
             if p and os.path.exists(p):
                 # We might want to keep them for faster debugging,
                 # but for CI/tests we should clean up.
                 os.remove(p)
 
-    def test_emd_9943_correlation(self):
+    def test_emd_9943_correlation(self) -> None:
         """
         Compare synthetic map from 6K7V with experimental map EMD-9943.
         """

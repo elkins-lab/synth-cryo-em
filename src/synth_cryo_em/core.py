@@ -125,9 +125,9 @@ def apply_ctf(
 
     nz, ny, nx = data.shape
     # Frequencies
-    kz = np.fft.fftfreq(nz, d=voxel_size[2])
+    kz = np.fft.fftfreq(nz, d=voxel_size[0])
     ky = np.fft.fftfreq(ny, d=voxel_size[1])
-    kx = np.fft.fftfreq(nx, d=voxel_size[0])
+    kx = np.fft.fftfreq(nx, d=voxel_size[2])
 
     Kz, Ky, Kx = np.meshgrid(kz, ky, kx, indexing="ij")
     k2 = Kz**2 + Ky**2 + Kx**2
@@ -171,9 +171,9 @@ def compute_fsc(
 
     # Calculate radial bins
     nz, ny, nx = data1.shape
-    kz = np.fft.fftfreq(nz, d=voxel_size[2])
+    kz = np.fft.fftfreq(nz, d=voxel_size[0])
     ky = np.fft.fftfreq(ny, d=voxel_size[1])
-    kx = np.fft.fftfreq(nx, d=voxel_size[0])
+    kx = np.fft.fftfreq(nx, d=voxel_size[2])
 
     Kz, Ky, Kx = np.meshgrid(kz, ky, kx, indexing="ij")
     k = np.sqrt(Kz**2 + Ky**2 + Kx**2)

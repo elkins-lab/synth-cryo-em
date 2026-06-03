@@ -50,7 +50,7 @@ class TestCoverageExpansion(unittest.TestCase):
     def test_generate_density_map_use_bfactors(self) -> None:
         """Test generate_density_map with use_bfactors=True."""
         st = gemmi.Structure()
-        model = gemmi.Model("1")
+        model = gemmi.Model(1)
         chain = gemmi.Chain("A")
         res = gemmi.Residue()
         res.name = "ALA"

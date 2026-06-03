@@ -13,8 +13,11 @@ class TestEmpiricalValidation(unittest.TestCase):
     Uses small real-world structures to validate correlation.
     """
 
+    pdb_id: str
+    pdb_path: str | None
+
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         # We use a very small, well-known protein: Crambin (PDB: 1CRN)
         # It's small (46 residues) and stable.
         cls.pdb_id = "1crn"
@@ -29,11 +32,11 @@ class TestEmpiricalValidation(unittest.TestCase):
                 cls.pdb_path = None
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         if cls.pdb_path and os.path.exists(cls.pdb_path):
             os.remove(cls.pdb_path)
 
-    def test_crambin_reconstruction_consistency(self):
+    def test_crambin_reconstruction_consistency(self) -> None:
         """
         Validate that generating a map at a specific resolution and
         re-evaluating it against the same model yields high correlation.
@@ -62,7 +65,7 @@ class TestEmpiricalValidation(unittest.TestCase):
         # Identical parameters should yield identical results
         self.assertAlmostEqual(ccc, 1.0, places=5)
 
-    def test_resolution_cutoffs(self):
+    def test_resolution_cutoffs(self) -> None:
         """
         Validate that the FSC correctly reflects the simulated resolution.
         If we simulate at 6A, the FSC against a higher resolution (3A) version

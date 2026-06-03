@@ -1,38 +1,91 @@
-# 🧬 synth-cryo-em: Synthetic Cryo-EM Map Generation
+# synth-cryo-em
 
 [![PyPI version](https://img.shields.io/pypi/v/synth-cryo-em.svg)](https://pypi.org/project/synth-cryo-em/)
-[![Supported Python versions](https://img.shields.io/pypi/pyversions/synth-cryo-em.svg)](https://pypi.org/project/synth-cryo-em/)
-[![Tests](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Tests](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml)
+[![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://elkins.github.io/synth-cryo-em/)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Checked with mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](https://mypy-lang.org/)
 
-`synth-cryo-em` generates synthetic density maps from PDB structures, simulating the image-formation process of electron cryo-microscopy.
+A lightweight Pythonic utility to convert atomic models (PDB/CIF) into synthetic 3D Cryo-EM maps with realistic noise, CTF effects, and varying resolutions.
 
----
+## 🌟 Features
+- **Voxelize** atomic models with accurate resolution simulation.
+- **Simulate Physics:** Apply Contrast Transfer Functions (CTF) and envelope functions.
+- **Noise Modeling:** Add adjustable Gaussian noise to simulate low-SNR experimental data.
+- **Standard Format:** Export results to MRC files compatible with RELION, ChimeraX, and other tools.
 
-### 🧪 For Structural Biologists
-*   **Map Simulation:** Create density maps at various resolutions (e.g., 2Å to 20Å) to assist in model building and validation.
-*   **MRC Export:** Generates standard `.mrc` files compatible with ChimeraX and PyMOL.
+## 🚀 Quick Start
 
-### 🤖 For Machine Learning Geeks
-*   **ML Training Data:** Generate large-scale voxel datasets for training 3D CNNs or diffusion models for map denoising and deconvolution.
-*   **Physics-Grounded:** Models the atomic scattering factors for electrons to ensure physically accurate maps.
-
----
-
-## 📦 Installation
-
+### Installation
 ```bash
 pip install synth-cryo-em
 ```
 
-## 📖 Tutorials
+### Basic Generation
+```bash
+synth-cryo-em structure.pdb output.mrc --resolution 4.0
+```
 
-Get started immediately with our interactive Jupyter notebooks:
+### Realistic Simulation
+```bash
+synth-cryo-em structure.pdb output.mrc --resolution 3.5 --apply-physics --snr 5
+```
 
-*   **[Quick Start: Synthetic Cryo-EM Density Generation](notebooks/quickstart_cryo_em.ipynb)**: Learn how to generate density maps from PDB structures at varying resolutions.
-    [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-cryo-em/blob/main/notebooks/quickstart_cryo_em.ipynb)
+## 📚 Tutorials
+Explore the project's functionality interactively via our Jupyter notebooks:
 
-## 📜 License
+- **Interactive Physics & Visualization**: Explore how resolution, noise (SNR), and CTF effects change the visual features of a map in 3D.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-cryo-em/blob/main/notebooks/visual_tutorial.ipynb)
+- **Core API Walkthrough**: A step-by-step guide to using the Python API for custom workflows.
+  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-cryo-em/blob/main/notebooks/interactive_tutorial.ipynb)
 
-Distributed under the MIT License. See `LICENSE` for more information.
+## 📖 Documentation
+For detailed guides and API reference, visit the [Documentation Site](https://elkins.github.io/synth-cryo-em/).
+
+## 🛠️ Development
+To install for development and documentation:
+```bash
+pip install -e ".[test,docs]"
+```
+
+Run tests:
+```bash
+pytest tests/
+```
+
+Build docs locally:
+```bash
+mkdocs serve
+```
+
+## Related Projects
+
+This library is part of the **synth-pdb ecosystem**:
+
+- [synth-pdb](https://github.com/elkins/synth-pdb) — Core protein structure generator
+- [synth-nmr](https://github.com/elkins/synth-nmr) — NMR observables simulator
+- [synth-saxs](https://github.com/elkins/synth-saxs) — SAXS profile simulator
+- [synth-dynamics](https://github.com/georgeelkins/synth-dynamics) — ANM/Langevin dynamics engine
+- [diff-biophys](https://github.com/elkins/diff-biophys) — Differentiable JAX biophysics kernels
+
+## Contributing
+
+Contributions are welcome! Please open an issue or pull request on [GitHub](https://github.com/elkins/synth-cryo-em). Run `pre-commit run --all-files` before submitting.
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
+
+## Citation
+
+```bibtex
+@software{synth_cryo_em,
+  author  = {Elkins, George},
+  title   = {synth-cryo-em: Synthetic cryo-EM map generation from atomic models},
+  year    = {2024},
+  url     = {https://github.com/elkins/synth-cryo-em},
+  version = {0.1.0}
+}
+```

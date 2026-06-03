@@ -1,11 +1,18 @@
+from typing import Any
+
 import gemmi
 import mrcfile
 import numpy as np
+import numpy.typing as npt
 
 
 def generate_density_map(
-    input_path, resolution, grid_spacing=None, use_bfactors=False, margin=None
-):
+    input_path: str,
+    resolution: float,
+    grid_spacing: float | None = None,
+    use_bfactors: bool = False,
+    margin: float | None = None,
+) -> tuple[gemmi.FloatGrid, npt.NDArray[np.float64]]:
     """
     Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.
     If use_bfactors is True, use atomic B-factors for local resolution.
@@ -16,17 +23,17 @@ def generate_density_map(
         grid_spacing = resolution / 3.0
 
     # Get all atomic positions
-    positions = []
+    positions_list: list[list[float]] = []
     for model in st:
         for chain in model:
             for residue in chain:
                 for atom in residue:
-                    positions.append(atom.pos.tolist())
+                    positions_list.append(atom.pos.tolist())
 
-    if not positions:
+    if not positions_list:
         raise ValueError("No atoms found in structure")
 
-    positions = np.array(positions)
+    positions = np.array(positions_list)
     if margin is None:
         margin = resolution * 2.0
 
@@ -84,7 +91,7 @@ def generate_density_map(
     return calc.grid, min_pos
 
 
-def add_gaussian_noise(data, snr):
+def add_gaussian_noise(data: npt.NDArray[np.float64], snr: float) -> npt.NDArray[np.float64]:
     """
     Add Gaussian noise to the data based on desired SNR.
     """
@@ -95,8 +102,14 @@ def add_gaussian_noise(data, snr):
 
 
 def apply_ctf(
-    data, voxel_size, defoc=2.0, cs=2.7, voltage=300, amplitude_contrast=0.1, b_factor=0.0
-):
+    data: npt.NDArray[np.float64],
+    voxel_size: tuple[float, float, float],
+    defoc: float = 2.0,
+    cs: float = 2.7,
+    voltage: float = 300,
+    amplitude_contrast: float = 0.1,
+    b_factor: float = 0.0,
+) -> npt.NDArray[np.float64]:
     """
     Apply a simple Contrast Transfer Function (CTF) to the 3D data.
     defoc: defocus in micrometers
@@ -135,7 +148,11 @@ def apply_ctf(
     return np.real(np.fft.ifftn(data_f))
 
 
-def compute_fsc(data1, data2, voxel_size):
+def compute_fsc(
+    data1: npt.NDArray[np.float64],
+    data2: npt.NDArray[np.float64],
+    voxel_size: tuple[float, float, float],
+) -> tuple[npt.NDArray[np.float64], npt.NDArray[np.float64]]:
     """
     Compute the Fourier Shell Correlation (FSC) between two 3D maps.
     Returns frequencies and correlation values.
@@ -204,7 +221,7 @@ def compute_fsc(data1, data2, voxel_size):
     return np.array(freqs), np.array(fsc)
 
 
-def compute_ccc(data1, data2):
+def compute_ccc(data1: npt.NDArray[np.float64], data2: npt.NDArray[np.float64]) -> float:
     """
     Compute the Cross-Correlation Coefficient (CCC) between two 3D maps.
     """
@@ -222,18 +239,27 @@ def compute_ccc(data1, data2):
 
     if den == 0:
         return 0.0
-    return num / den
+    return float(num / den)
 
 
-def save_mrc(data, output_path, origin=(0, 0, 0), spacing=(1, 1, 1)):
+def save_mrc(
+    data: npt.NDArray[Any],
+    output_path: str,
+    origin: npt.ArrayLike = (0, 0, 0),
+    spacing: npt.ArrayLike = (1, 1, 1),
+) -> None:
     """
     Save numpy array to MRC file.
     """
+    # Convert origin and spacing to 1D arrays for easier indexing if they aren't already
+    origin_arr = np.asarray(origin)
+    spacing_arr = np.asarray(spacing)
+
     with mrcfile.new(output_path, overwrite=True) as mrc:
         mrc.set_data(data.astype(np.float32))
-        mrc.voxel_size = spacing
+        mrc.voxel_size = (float(spacing_arr[0]), float(spacing_arr[1]), float(spacing_arr[2]))
         # mrcfile uses x, y, z for origin
-        mrc.header.origin.x = origin[0]
-        mrc.header.origin.y = origin[1]
-        mrc.header.origin.z = origin[2]
+        mrc.header.origin.x = float(origin_arr[0])
+        mrc.header.origin.y = float(origin_arr[1])
+        mrc.header.origin.z = float(origin_arr[2])
         mrc.update_header_from_data()

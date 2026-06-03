@@ -9,7 +9,7 @@ from .core import compute_ccc, compute_fsc
 @click.argument("map1_path", type=click.Path(exists=True))
 @click.argument("map2_path", type=click.Path(exists=True))
 @click.option("--output", "-o", help="Path to save FSC data (CSV)")
-def main(map1_path, map2_path, output):
+def main(map1_path: str, map2_path: str, output: str | None) -> None:
     """
     Compare two Cryo-EM maps using Fourier Shell Correlation (FSC) and CCC.
     """
@@ -33,7 +33,10 @@ def main(map1_path, map2_path, output):
     # Print some key values
     click.echo(f"{'Resolution (A)':<15} | {'FSC':<10}")
     click.echo("-" * 30)
-    for i in range(0, len(freqs), len(freqs) // 10):
+
+    # Ensure step is at least 1
+    step = max(1, len(freqs) // 10)
+    for i in range(0, len(freqs), step):
         res = 1.0 / freqs[i] if freqs[i] > 0 else float("inf")
         click.echo(f"{res:<15.2f} | {fsc[i]:<10.4f}")
 

@@ -19,18 +19,18 @@ from .core import add_gaussian_noise, apply_ctf, generate_density_map, save_mrc
 )
 @click.option("--apply-physics/--no-physics", default=False, help="Apply CTF effects")
 def main(
-    input_path,
-    output_path,
-    resolution,
-    spacing,
-    snr,
-    defocus,
-    voltage,
-    cs,
-    bfactor,
-    bfactors,
-    apply_physics,
-):
+    input_path: str,
+    output_path: str,
+    resolution: float,
+    spacing: float | None,
+    snr: float | None,
+    defocus: float,
+    voltage: float,
+    cs: float,
+    bfactor: float,
+    bfactors: bool,
+    apply_physics: bool,
+) -> None:
     """
     Generate a synthetic Cryo-EM map from an atomic model (PDB, mmCIF, or BCIF).
     """

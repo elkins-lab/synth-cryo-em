@@ -96,9 +96,20 @@ class TestEmpiricalValidation(unittest.TestCase):
 
         freqs, fsc = compute_fsc(data_low, data_high, voxel_size)
 
-        # The FSC should be lower at higher frequencies
-        # Check that FSC at high frequency (near Nyquist) is much lower than at low frequency
-        self.assertGreater(fsc[1], fsc[-1], "FSC should decrease with frequency")
+        # The FSC should be higher at low frequencies than at high frequencies.
+        # Use the freqs array (not positional indices) so the comparison is
+        # robust regardless of bin count or array ordering.
+        midpoint = (freqs.min() + freqs.max()) / 2.0
+        low_freq_fsc = fsc[freqs < midpoint]
+        high_freq_fsc = fsc[freqs >= midpoint]
+
+        self.assertGreater(len(low_freq_fsc), 0, "Expected non-empty low-frequency bins")
+        self.assertGreater(len(high_freq_fsc), 0, "Expected non-empty high-frequency bins")
+        self.assertGreater(
+            float(np.mean(low_freq_fsc)),
+            float(np.mean(high_freq_fsc)),
+            "Mean FSC in low-frequency half should exceed mean FSC in high-frequency half",
+        )
 
         # Check for a drop below 0.5 at some point
         low_fsc_indices = np.where(fsc < 0.5)[0]

@@ -185,15 +185,20 @@ def compute_fsc(
     p2 = p2.ravel()
 
     # Sort by frequency
-    idx = np.argsort(k)
+    idx = np.argsort(k, kind="stable")
     k_sorted = k[idx]
     cross_sorted = cross[idx]
     p1_sorted = p1[idx]
     p2_sorted = p2[idx]
 
-    # Binning
+    # Binning — start at a small epsilon so the DC voxel (k=0) is excluded.
+    # Including DC would produce FSC=1.0 in whichever bin it lands in, which is
+    # misleading and whose position is sensitive to floating-point precision in
+    # np.linspace across NumPy builds.
     n_bins = min(nx, ny, nz) // 2
-    bins = np.linspace(0, k_sorted.max(), n_bins + 1)
+    k_max = float(k_sorted.max())
+    k_eps = k_max / (10 * n_bins)  # one-tenth of a bin width
+    bins = np.linspace(k_eps, k_max, n_bins + 1)
 
     fsc = []
     freqs = []
@@ -220,7 +225,13 @@ def compute_fsc(
                 fsc.append(np.clip(val, -1.0, 1.0))
                 freqs.append((bins[i] + bins[i + 1]) / 2.0)
 
-    return np.array(freqs, dtype=np.float64), np.array(fsc, dtype=np.float64)
+    freqs_arr = np.array(freqs, dtype=np.float64)
+    fsc_arr = np.array(fsc, dtype=np.float64)
+
+    # Guarantee output is sorted by ascending frequency (defensive against any
+    # future NumPy sort-stability changes).
+    order = np.argsort(freqs_arr, kind="stable")
+    return freqs_arr[order], fsc_arr[order]
 
 
 def compute_ccc(data1: npt.NDArray[Any], data2: npt.NDArray[Any]) -> float:

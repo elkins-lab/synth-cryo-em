@@ -11,4 +11,5 @@ plugins:
 nav:
   - Home: index.md
   - Usage: usage.md
+  - Scientific Foundations: science.md
   - API Reference: api.md

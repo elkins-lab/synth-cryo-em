@@ -8,7 +8,7 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Checked with mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](https://mypy-lang.org/)
 
-A lightweight Pythonic utility to convert atomic models (PDB/CIF) into synthetic 3D Cryo-EM maps with realistic noise, CTF effects, and varying resolutions.
+A lightweight Pythonic utility to convert atomic models (PDB/CIF) into synthetic 3D Cryo-EM maps with realistic noise, CTF effects and varying resolutions.
 
 ## 🌟 Features
 - **Voxelize** atomic models with accurate resolution simulation.
@@ -84,7 +84,7 @@ MIT License — see [LICENSE](LICENSE) for details.
 @software{synth_cryo_em,
   author  = {Elkins, George},
   title   = {synth-cryo-em: Synthetic cryo-EM map generation from atomic models},
-  year    = {2024},
+  year    = {2026},
   url     = {https://github.com/elkins/synth-cryo-em},
   version = {0.1.0}
 }

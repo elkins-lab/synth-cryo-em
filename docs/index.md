@@ -9,3 +9,6 @@ A lightweight Pythonic utility to convert atomic models into synthetic 3D Cryo-E
 - **ML Training:** Generate thousands of labeled synthetic maps for training denoisers, pickers, and segmentors.
 - **Education:** Visualize how experimental parameters like resolution and defocus affect the resulting 3D density.
 - **Validation:** Test the robustness of structural biology algorithms against varied noise and resolution levels.
+
+## Scientific Basis
+For details on the physical models and mathematical formulas used in this project, see our [Scientific Foundations](science.md) page.

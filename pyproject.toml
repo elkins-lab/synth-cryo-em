@@ -30,6 +30,7 @@ dependencies = [
     "gemmi",
     "scipy",
     "click",
+    "synth-core @ file:///Users/georgeelkins/nmr/synth-core",
 ]
 
 [project.optional-dependencies]

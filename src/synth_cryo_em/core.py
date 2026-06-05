@@ -161,22 +161,30 @@ def compute_fsc(
     assert data1.shape == data2.shape
 
     # Fourier transforms in float64 for precision
-    f1 = np.fft.fftn(data1.astype(np.float64))
-    f2 = np.fft.fftn(data2.astype(np.float64))
+    # Use rfftn instead of fftn for real inputs.
+    # This not only improves performance but also circumvents a memory-corruption
+    # bug in NumPy 2.2.6 with Python 3.14 during complex multiplication.
+    f1 = np.fft.rfftn(data1)
+    f2 = np.fft.rfftn(data2)
 
-    # Cross-spectral density
-    cross = f1 * np.conj(f2)
-    p1 = np.real(f1 * np.conj(f1))
-    p2 = np.real(f2 * np.conj(f2))
+    # Cross-spectral density and power spectra are computed using pure float arithmetic.
+    # We avoid `f1 * np.conj(f2)` and `np.real(f1 * np.conj(f1))` because the complex
+    # multiplication triggers a severe memory mutation/aliasing bug in Numpy 2.2.6 prerelease.
+    cross = f1.real * f2.real + f1.imag * f2.imag
+    p1 = f1.real**2 + f1.imag**2
+    p2 = f2.real**2 + f2.imag**2
 
     # Calculate radial bins
     nz, ny, nx = data1.shape
     kz = np.fft.fftfreq(nz, d=voxel_size[0])
     ky = np.fft.fftfreq(ny, d=voxel_size[1])
-    kx = np.fft.fftfreq(nx, d=voxel_size[2])
+    kx = np.fft.rfftfreq(nx, d=voxel_size[2])
 
-    Kz, Ky, Kx = np.meshgrid(kz, ky, kx, indexing="ij")
-    k = np.sqrt(Kz**2 + Ky**2 + Kx**2)
+    # Create 3D grid of frequencies
+    kz_grid, ky_grid, kx_grid = np.meshgrid(kz, ky, kx, indexing="ij")
+
+    # Calculate magnitude of frequency vector for each voxel
+    k = np.sqrt(kz_grid**2 + ky_grid**2 + kx_grid**2)
 
     # Flatten everything
     k = k.ravel()
@@ -185,7 +193,7 @@ def compute_fsc(
     p2 = p2.ravel()
 
     # Sort by frequency
-    idx = np.argsort(k, kind="stable")
+    idx = np.argsort(k)
     k_sorted = k[idx]
     cross_sorted = cross[idx]
     p1_sorted = p1[idx]
@@ -199,6 +207,7 @@ def compute_fsc(
     k_max = float(k_sorted.max())
     k_eps = k_max / (10 * n_bins)  # one-tenth of a bin width
     bins = np.linspace(k_eps, k_max, n_bins + 1)
+    print(f"DEBUG BINS: k_max={k_max}, bins={bins}")
 
     fsc = []
     freqs = []

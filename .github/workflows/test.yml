@@ -35,6 +35,8 @@ jobs:
         - python-version: "3.14"
           numpy-version: "1.26.4"
 
+        - os: windows-latest
+          python-version: '3.14'
     steps:
     - uses: actions/checkout@v4
 

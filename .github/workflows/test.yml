@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [ "master", "main" ]
+    branches: ["master", "main"]
   pull_request:
-    branches: [ "master", "main" ]
+    branches: ["master", "main"]
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -22,18 +22,18 @@ jobs:
         python-version: ["3.11", "3.12", "3.13", "3.14"]
         numpy-version: ["1.26.4", "2.2.6", "2.3.5"]
         exclude:
-          - python-version: "3.11"
-            numpy-version: "2.2.6"
-          - python-version: "3.11"
-            numpy-version: "2.3.5"
-          - python-version: "3.12"
-            numpy-version: "2.2.6"
-          - python-version: "3.12"
-            numpy-version: "2.3.5"
-          - python-version: "3.13"
-            numpy-version: "1.26.4"
-          - python-version: "3.14"
-            numpy-version: "1.26.4"
+        - python-version: "3.11"
+          numpy-version: "2.2.6"
+        - python-version: "3.11"
+          numpy-version: "2.3.5"
+        - python-version: "3.12"
+          numpy-version: "2.2.6"
+        - python-version: "3.12"
+          numpy-version: "2.3.5"
+        - python-version: "3.13"
+          numpy-version: "1.26.4"
+        - python-version: "3.14"
+          numpy-version: "1.26.4"
 
     steps:
     - uses: actions/checkout@v4
@@ -54,6 +54,7 @@ jobs:
         export MYPYPATH=src
         mypy -p synth_cryo_em
 
+      shell: bash
     - name: Lint with ruff
       run: |
         ruff check src/

@@ -30,7 +30,7 @@ dependencies = [
     "gemmi",
     "scipy",
     "click",
-    "synth-core @ file:///Users/georgeelkins/nmr/synth-core",
+    "synth-core @ git+https://github.com/elkins/synth-core.git",
 ]
 
 [project.optional-dependencies]

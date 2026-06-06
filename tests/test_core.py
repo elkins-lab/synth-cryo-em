@@ -123,7 +123,7 @@ END
         by using a highly anisotropic box and a signal that would be scrambled
         if axes were swapped.
         """
-        from synth_cryo_em.core import compute_fsc
+        from synth_core import compute_fsc
 
         # Create a highly anisotropic box: (40, 10, 20)
         shape = (40, 10, 20)

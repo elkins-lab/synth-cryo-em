@@ -2,8 +2,9 @@ import os
 import unittest
 
 import numpy as np
+from synth_core import add_gaussian_noise, compute_fsc
 
-from synth_cryo_em.core import add_gaussian_noise, apply_ctf, compute_fsc, generate_density_map
+from synth_cryo_em.core import apply_ctf, generate_density_map
 
 
 class TestScientificValidity(unittest.TestCase):

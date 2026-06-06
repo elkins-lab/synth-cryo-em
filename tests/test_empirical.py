@@ -3,8 +3,9 @@ import unittest
 import urllib.request
 
 import numpy as np
+from synth_core import compute_fsc
 
-from synth_cryo_em.core import compute_ccc, compute_fsc, generate_density_map
+from synth_cryo_em.core import compute_ccc, generate_density_map
 
 
 class TestEmpiricalValidation(unittest.TestCase):

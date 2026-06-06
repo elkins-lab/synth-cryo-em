@@ -1,7 +1,8 @@
 import click
 import numpy as np
+from synth_core import add_gaussian_noise
 
-from .core import add_gaussian_noise, apply_ctf, generate_density_map, save_mrc
+from .core import apply_ctf, generate_density_map, save_mrc
 
 
 @click.command()

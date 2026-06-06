@@ -1,8 +1,9 @@
 import click
 import mrcfile
 import numpy as np
+from synth_core import compute_fsc
 
-from .core import compute_ccc, compute_fsc
+from .core import compute_ccc
 
 
 def compute_and_report_fsc(

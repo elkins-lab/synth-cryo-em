@@ -566,31 +566,31 @@
 <h2 id="density-generation">Density Generation</h2>
 <p>The mapping from atomic coordinates to 3D density is performed using <a href="https://gemmi.readthedocs.io/">Gemmi</a>.</p>
 <h3 id="resolution-and-blur">Resolution and Blur</h3>
-<p>In structural biology, the relationship between resolution ($d$) and the isotropic B-factor ($B$) is often approximated as:
-$$B \approx 8 d^2$$
+<p>In structural biology, the relationship between resolution (<span class="arithmatex">\(d\)</span>) and the isotropic B-factor (<span class="arithmatex">\(B\)</span>) is often approximated as:
+$<span class="arithmatex">\(B \approx 8 d^2\)</span>$
 This ensures that the information content is significantly attenuated beyond the target resolution. When <code>--no-bfactors</code> (default) is used, a global blur is applied to all atoms using this relationship.</p>
 <h3 id="local-resolution">Local Resolution</h3>
 <p>When <code>--bfactors</code> is enabled, the atomic B-factors from the input PDB/CIF file are used directly. This allows for simulating "local resolution" effects where flexible regions of a protein appear more blurred than the rigid core.</p>
 <h2 id="contrast-transfer-function-ctf">Contrast Transfer Function (CTF)</h2>
-<p>The simulation of the microscope's optics follows the standard phase-contrast model. The phase shift $\chi(k)$ at spatial frequency $k$ is given by:
-$$\chi(k) = \pi \lambda k^2 (\Delta f - 0.5 \lambda^2 k^2 C_s)$$
+<p>The simulation of the microscope's optics follows the standard phase-contrast model. The phase shift <span class="arithmatex">\(\chi(k)\)</span> at spatial frequency <span class="arithmatex">\(k\)</span> is given by:
+$<span class="arithmatex">\(\chi(k) = \pi \lambda k^2 (\Delta f - 0.5 \lambda^2 k^2 C_s)\)</span>$
 where:
-- $\lambda$ is the relativistic electron wavelength.
-- $\Delta f$ is the defocus.
-- $C_s$ is the spherical aberration.</p>
+- <span class="arithmatex">\(\lambda\)</span> is the relativistic electron wavelength.
+- <span class="arithmatex">\(\Delta f\)</span> is the defocus.
+- <span class="arithmatex">\(C_s\)</span> is the spherical aberration.</p>
 <p>The resulting CTF is:
-$$CTF(k) = -(\sqrt{1-w^2} \sin(\chi(k)) + w \cos(\chi(k)))$$
-where $w$ is the amplitude contrast.</p>
+$<span class="arithmatex">\(CTF(k) = -(\sqrt{1-w^2} \sin(\chi(k)) + w \cos(\chi(k)))\)</span>$
+where <span class="arithmatex">\(w\)</span> is the amplitude contrast.</p>
 <h3 id="envelope-function">Envelope Function</h3>
 <p>An optional envelope function can be applied to simulate spatial and temporal incoherence:
-$$E(k) = e^{-B_{env} k^2 / 4}$$</p>
+$<span class="arithmatex">\(E(k) = e^{-B_{env} k^2 / 4}\)</span>$</p>
 <h2 id="validation-metrics">Validation Metrics</h2>
 <h3 id="fourier-shell-correlation-fsc">Fourier Shell Correlation (FSC)</h3>
 <p>FSC measures the normalized cross-correlation between two 3D maps in shells of constant spatial frequency. It is the standard tool for assessing resolution in Cryo-EM.
-$$FSC(k) = \frac{\sum_{|k'|=k} F_1(k') \cdot F_2(k')^*}{\sqrt{\sum_{|k'|=k} |F_1(k')|^2 \cdot \sum_{|k'|=k} |F_2(k')|^2}}$$</p>
+$<span class="arithmatex">\(FSC(k) = \frac{\sum_{|k'|=k} F_1(k') \cdot F_2(k')^*}{\sqrt{\sum_{|k'|=k} |F_1(k')|^2 \cdot \sum_{|k'|=k} |F_2(k')|^2}}\)</span>$</p>
 <h3 id="cross-correlation-coefficient-ccc">Cross-Correlation Coefficient (CCC)</h3>
 <p>CCC provides a global measure of similarity between two maps in real space:
-$$CCC = \frac{\sum (M_1 - \bar{M_1})(M_2 - \bar{M_2})}{\sqrt{\sum (M_1 - \bar{M_1})^2 \sum (M_2 - \bar{M_2})^2}}$$</p>
+$<span class="arithmatex">\(CCC = \frac{\sum (M_1 - \bar{M_1})(M_2 - \bar{M_2})}{\sqrt{\sum (M_1 - \bar{M_1})^2 \sum (M_2 - \bar{M_2})^2}}\)</span>$</p>
 
 
 
@@ -644,6 +644,10 @@ $$CCC = \frac{\sum (M_1 - \bar{M_1})(M_2 - \bar{M_2})}{\sqrt{\sum (M_1 - \bar{M_
     
     
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>

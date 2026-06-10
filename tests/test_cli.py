@@ -52,8 +52,15 @@ def test_cli_with_physics_and_noise() -> None:
         assert os.path.exists("output.mrc")
 
 
-def test_cli_invalid_input() -> None:
+def test_cli_invalid_resolution() -> None:
     runner = CliRunner()
     with runner.isolated_filesystem():
-        result = runner.invoke(main, ["nonexistent.pdb", "output.mrc"])
+        with open("test.pdb", "w") as f:
+            f.write(
+                "ATOM      1  CA  ALA A   1      10.000  10.000  10.000  1.00 20.00           C\n"
+            )
+
+        # Negative resolution should trigger ValueError and be caught by the CLI
+        result = runner.invoke(main, ["test.pdb", "output.mrc", "--resolution", "-1.0"])
         assert result.exit_code != 0
+        assert "Error: Resolution must be positive" in result.output

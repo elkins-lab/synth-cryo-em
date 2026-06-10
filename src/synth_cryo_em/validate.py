@@ -43,18 +43,19 @@ def main(map1_path: str, map2_path: str, output: str | None) -> None:
     """
     Compare two Cryo-EM maps using Fourier Shell Correlation (FSC) and CCC.
     """
-    with mrcfile.open(map1_path) as m1, mrcfile.open(map2_path) as m2:
-        data1 = m1.data
-        data2 = m2.data
-        if data1.shape != data2.shape:
-            click.echo(f"Error: Maps have different shapes {data1.shape} vs {data2.shape}")
-            return
-        voxel_size = (m1.voxel_size.z, m1.voxel_size.y, m1.voxel_size.x)
+    try:
+        with mrcfile.open(map1_path) as m1, mrcfile.open(map2_path) as m2:
+            data1 = m1.data
+            data2 = m2.data
+            voxel_size = (m1.voxel_size.z, m1.voxel_size.y, m1.voxel_size.x)
 
-    ccc = compute_ccc(data1, data2)
-    freqs, fsc = compute_fsc(data1, data2, voxel_size)
+        ccc = compute_ccc(data1, data2)
+        freqs, fsc = compute_fsc(data1, data2, voxel_size)
 
-    compute_and_report_fsc(freqs, fsc, ccc, output)
+        compute_and_report_fsc(freqs, fsc, ccc, output)
+    except ValueError as e:
+        click.echo(f"Error: {e}", err=True)
+        raise click.Abort() from e
 
 
 if __name__ == "__main__":

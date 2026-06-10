@@ -58,14 +58,17 @@ def test_validate_identical() -> None:
         assert "Overall Cross-Correlation Coefficient (CCC): 1.0000" in result.output
 
 
-def test_validate_different_shapes() -> None:
+def test_validate_mismatched_shapes_value_error() -> None:
     runner = CliRunner()
     with runner.isolated_filesystem():
+        # Maps with different shapes
         data1 = np.zeros((10, 10, 10), dtype=np.float32)
-        data2 = np.zeros((12, 12, 12), dtype=np.float32)
+        data2 = np.zeros((10, 10, 11), dtype=np.float32)
 
         create_dummy_mrc("map1.mrc", data1)
         create_dummy_mrc("map2.mrc", data2)
 
+        # compute_ccc will raise ValueError due to shape mismatch
         result = runner.invoke(main, ["map1.mrc", "map2.mrc"])
+        assert result.exit_code != 0
         assert "Error: Maps have different shapes" in result.output

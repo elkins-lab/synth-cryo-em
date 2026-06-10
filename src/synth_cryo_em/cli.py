@@ -35,30 +35,36 @@ def main(
     """
     Generate a synthetic Cryo-EM map from an atomic model (PDB, mmCIF, or BCIF).
     """
-    click.echo(f"Generating map for {input_path} at {resolution}A resolution...")
+    try:
+        click.echo(f"Generating map for {input_path} at {resolution}A resolution...")
 
-    grid, origin = generate_density_map(
-        input_path, resolution, grid_spacing=spacing, use_bfactors=bfactors
-    )
-
-    data = np.array(grid, copy=True)
-
-    # Voxel size is from the unit cell
-    uc = grid.unit_cell
-    vox_size = (uc.a / grid.nu, uc.b / grid.nv, uc.c / grid.nw)
-
-    if apply_physics:
-        click.echo(
-            f"Applying CTF (defocus={defocus}um, voltage={voltage}kV, B-factor={bfactor})..."
+        grid, origin = generate_density_map(
+            input_path, resolution, grid_spacing=spacing, use_bfactors=bfactors
         )
-        data = apply_ctf(data, vox_size, defoc=defocus, cs=cs, voltage=voltage, b_factor=bfactor)
 
-    if snr is not None:
-        click.echo(f"Adding Gaussian noise (SNR={snr})...")
-        data = add_gaussian_noise(data, snr)
+        data = np.array(grid, copy=True)
 
-    save_mrc(data, output_path, origin=origin, spacing=vox_size)
-    click.echo(f"Saved synthetic map to {output_path}")
+        # Voxel size is from the unit cell
+        uc = grid.unit_cell
+        vox_size = (uc.a / grid.nu, uc.b / grid.nv, uc.c / grid.nw)
+
+        if apply_physics:
+            click.echo(
+                f"Applying CTF (defocus={defocus}um, voltage={voltage}kV, B-factor={bfactor})..."
+            )
+            data = apply_ctf(
+                data, vox_size, defoc=defocus, cs=cs, voltage=voltage, b_factor=bfactor
+            )
+
+        if snr is not None:
+            click.echo(f"Adding Gaussian noise (SNR={snr})...")
+            data = add_gaussian_noise(data, snr)
+
+        save_mrc(data, output_path, origin=origin, spacing=vox_size)
+        click.echo(f"Saved synthetic map to {output_path}")
+    except ValueError as e:
+        click.echo(f"Error: {e}", err=True)
+        raise click.Abort() from e
 
 
 if __name__ == "__main__":

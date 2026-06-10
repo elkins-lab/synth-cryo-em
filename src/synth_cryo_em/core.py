@@ -17,6 +17,13 @@ def generate_density_map(
     Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.
     If use_bfactors is True, use atomic B-factors for local resolution.
     """
+    if resolution <= 0:
+        raise ValueError(f"Resolution must be positive, got {resolution}")
+    if grid_spacing is not None and grid_spacing <= 0:
+        raise ValueError(f"Grid spacing must be positive, got {grid_spacing}")
+    if margin is not None and margin < 0:
+        raise ValueError(f"Margin must be non-negative, got {margin}")
+
     st = gemmi.read_structure(input_path)
     # If grid_spacing is not provided, use a rule of thumb (resolution / 3 or 4)
     if grid_spacing is None:
@@ -108,6 +115,13 @@ def apply_ctf(
     voltage: acceleration voltage in kV
     b_factor: envelope function B-factor
     """
+    if any(v <= 0 for v in voxel_size):
+        raise ValueError(f"Voxel size dimensions must be positive, got {voxel_size}")
+    if voltage <= 0:
+        raise ValueError(f"Voltage must be positive, got {voltage}")
+    if not (0 <= abs(amplitude_contrast) <= 1):
+        raise ValueError(f"Amplitude contrast must be between -1 and 1, got {amplitude_contrast}")
+
     # Constants
     wl = 12.26 / np.sqrt(voltage * 1000 + 0.9784 * voltage**2)  # wavelength in Angstroms
     cs_a = cs * 1e7  # cs in Angstroms
@@ -143,7 +157,8 @@ def compute_ccc(data1: npt.NDArray[Any], data2: npt.NDArray[Any]) -> float:
     """
     Compute the Cross-Correlation Coefficient (CCC) between two 3D maps.
     """
-    assert data1.shape == data2.shape
+    if data1.shape != data2.shape:
+        raise ValueError(f"Maps have different shapes: {data1.shape} vs {data2.shape}")
 
     # Flatten and convert to float64 for precision
     d1 = data1.astype(np.float64).ravel()

@@ -1,7 +1,7 @@
 # synth-cryo-em
 
 [![PyPI version](https://img.shields.io/pypi/v/synth-cryo-em.svg)](https://pypi.org/project/synth-cryo-em/)
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Python versions](https://img.shields.io/pypi/pyversions/synth-cryo-em)](https://pypi.org/project/synth-cryo-em/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://elkins.github.io/synth-cryo-em/)

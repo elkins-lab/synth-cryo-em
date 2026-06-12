@@ -4,7 +4,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/synth-cryo-em)](https://pypi.org/project/synth-cryo-em/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml/badge.svg)](https://github.com/elkins/synth-cryo-em/actions/workflows/test.yml)
-[![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://elkins.github.io/synth-cryo-em/)
+[![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://elkins-lab.github.io/synth-cryo-em/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Checked with mypy](https://img.shields.io/badge/type%20checked-mypy-blue)](https://mypy-lang.org/)
 [![codecov](https://codecov.io/gh/elkins/synth-cryo-em/branch/main/graph/badge.svg)](https://codecov.io/gh/elkins/synth-cryo-em)
@@ -43,7 +43,7 @@ Explore the project's functionality interactively via our Jupyter notebooks:
   [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/elkins/synth-cryo-em/blob/main/notebooks/interactive_tutorial.ipynb)
 
 ## 📖 Documentation
-For detailed guides and API reference, visit the [Documentation Site](https://elkins.github.io/synth-cryo-em/).
+For detailed guides and API reference, visit the [Documentation Site](https://elkins-lab.github.io/synth-cryo-em/).
 
 ## 🛠️ Development
 To install for development and documentation:

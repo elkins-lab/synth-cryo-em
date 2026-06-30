@@ -10,6 +10,9 @@ from .core import compute_fsc, compute_ccc
 def main(map1_path, map2_path, output):
     """
     Compare two Cryo-EM maps using Fourier Shell Correlation (FSC) and CCC.
+
+    This function acts as the CLI entrypoint for map validation. It loads two
+    MRC maps, verifies their dimensions, and computes correlation metrics.
     """
     click.echo(f"Comparing {map1_path} and {map2_path}...")
     
@@ -31,7 +34,8 @@ def main(map1_path, map2_path, output):
     # Print some key values
     click.echo(f"{'Resolution (A)':<15} | {'FSC':<10}")
     click.echo("-" * 30)
-    for i in range(0, len(freqs), len(freqs)//10):
+    step = max(1, len(freqs)//10)
+    for i in range(0, len(freqs), step):
         res = 1.0 / freqs[i] if freqs[i] > 0 else float('inf')
         click.echo(f"{res:<15.2f} | {fsc[i]:<10.4f}")
         

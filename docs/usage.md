@@ -39,3 +39,17 @@ synth-cryo-em structure.pdb output.mrc \
 | `--cs` | Spherical aberration in mm | 2.7 |
 | `--bfactor` | Envelope function B-factor | 0.0 |
 | `--apply-physics` | Enable CTF effects | False |
+
+## Map Validation
+
+The package also includes `synth-cryo-em-validate`, a tool to compare two Cryo-EM maps and compute their Cross-Correlation Coefficient (CCC) and Fourier Shell Correlation (FSC) curves.
+
+```bash
+synth-cryo-em-validate map1.mrc map2.mrc --output fsc_results.csv
+```
+
+### Validation Options
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--output` / `-o` | Path to save FSC data (CSV) | None |

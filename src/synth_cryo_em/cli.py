@@ -17,6 +17,9 @@ import numpy as np
 def main(input_path, output_path, resolution, spacing, snr, defocus, voltage, cs, bfactor, bfactors, apply_physics):
     """
     Generate a synthetic Cryo-EM map from an atomic model (PDB, mmCIF, or BCIF).
+
+    This function acts as the CLI entrypoint for map generation. It parses
+    arguments and coordinates the voxelization, CTF physics, and noise simulation.
     """
     click.echo(f"Generating map for {input_path} at {resolution}A resolution...")
     

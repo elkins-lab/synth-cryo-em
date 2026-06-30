@@ -3,10 +3,21 @@ import numpy as np
 import mrcfile
 from scipy.ndimage import gaussian_filter
 
-def generate_density_map(input_path, resolution, grid_spacing=None, use_bfactors=False, margin=None):
+def generate_density_map(input_path: str, resolution: float, grid_spacing: float = None, use_bfactors: bool = False, margin: float = None) -> tuple[np.ndarray, np.ndarray]:
     """
     Generate a density map from an atomic model file (PDB, mmCIF, BCIF) using gemmi.
-    If use_bfactors is True, use atomic B-factors for local resolution.
+
+    Args:
+        input_path (str): Path to the input structure file.
+        resolution (float): Target resolution in Angstroms.
+        grid_spacing (float, optional): Grid spacing (pixel size) in Angstroms. Defaults to resolution / 3.0.
+        use_bfactors (bool, optional): If True, use atomic B-factors for local resolution. Defaults to False.
+        margin (float, optional): Margin around the structure in Angstroms. Defaults to resolution * 2.0.
+
+    Returns:
+        tuple: A tuple containing:
+            - numpy.ndarray: The 3D density grid.
+            - numpy.ndarray: The origin coordinate of the map.
     """
     st = gemmi.read_structure(input_path)
     # If grid_spacing is not provided, use a rule of thumb (resolution / 3 or 4)
@@ -81,22 +92,37 @@ def generate_density_map(input_path, resolution, grid_spacing=None, use_bfactors
     
     return calc.grid, min_pos
 
-def add_gaussian_noise(data, snr):
+def add_gaussian_noise(data: np.ndarray, snr: float) -> np.ndarray:
     """
     Add Gaussian noise to the data based on desired SNR.
+
+    Args:
+        data (numpy.ndarray): The input 3D density map.
+        snr (float): Target Signal-to-Noise Ratio.
+
+    Returns:
+        numpy.ndarray: The noisy density map.
     """
     signal_power = np.mean(data**2)
     noise_power = signal_power / snr
     noise = np.random.normal(0, np.sqrt(noise_power), data.shape)
     return data + noise
 
-def apply_ctf(data, voxel_size, defoc=2.0, cs=2.7, voltage=300, amplitude_contrast=0.1, b_factor=0.0):
+def apply_ctf(data: np.ndarray, voxel_size: tuple[float, float, float], defoc: float = 2.0, cs: float = 2.7, voltage: float = 300.0, amplitude_contrast: float = 0.1, b_factor: float = 0.0) -> np.ndarray:
     """
     Apply a simple Contrast Transfer Function (CTF) to the 3D data.
-    defoc: defocus in micrometers
-    cs: spherical aberration in mm
-    voltage: acceleration voltage in kV
-    b_factor: envelope function B-factor
+
+    Args:
+        data (numpy.ndarray): The input 3D density map.
+        voxel_size (tuple): Voxel size in Angstroms (x, y, z).
+        defoc (float, optional): Defocus in micrometers. Defaults to 2.0.
+        cs (float, optional): Spherical aberration in mm. Defaults to 2.7.
+        voltage (float, optional): Acceleration voltage in kV. Defaults to 300.
+        amplitude_contrast (float, optional): Amplitude contrast fraction. Defaults to 0.1.
+        b_factor (float, optional): Envelope function B-factor. Defaults to 0.0.
+
+    Returns:
+        numpy.ndarray: The CTF-corrupted 3D density map.
     """
     # Constants
     wl = 12.26 / np.sqrt(voltage * 1000 + 0.9784 * voltage**2) # wavelength in Angstroms
@@ -128,10 +154,19 @@ def apply_ctf(data, voxel_size, defoc=2.0, cs=2.7, voltage=300, amplitude_contra
     data_f *= ctf
     return np.real(np.fft.ifftn(data_f))
 
-def compute_fsc(data1, data2, voxel_size):
+def compute_fsc(data1: np.ndarray, data2: np.ndarray, voxel_size: tuple[float, float, float]) -> tuple[np.ndarray, np.ndarray]:
     """
     Compute the Fourier Shell Correlation (FSC) between two 3D maps.
-    Returns frequencies and correlation values.
+
+    Args:
+        data1 (numpy.ndarray): The first 3D density map.
+        data2 (numpy.ndarray): The second 3D density map.
+        voxel_size (tuple): Voxel size in Angstroms (x, y, z).
+
+    Returns:
+        tuple: A tuple containing:
+            - numpy.ndarray: The spatial frequencies (1/Angstroms).
+            - numpy.ndarray: The computed FSC values.
     """
     assert data1.shape == data2.shape
     
@@ -196,9 +231,16 @@ def compute_fsc(data1, data2, voxel_size):
                 
     return np.array(freqs), np.array(fsc)
 
-def compute_ccc(data1, data2):
+def compute_ccc(data1: np.ndarray, data2: np.ndarray) -> float:
     """
     Compute the Cross-Correlation Coefficient (CCC) between two 3D maps.
+
+    Args:
+        data1 (numpy.ndarray): The first 3D density map.
+        data2 (numpy.ndarray): The second 3D density map.
+
+    Returns:
+        float: The Pearson cross-correlation coefficient between the two maps.
     """
     assert data1.shape == data2.shape
     
@@ -216,9 +258,15 @@ def compute_ccc(data1, data2):
         return 0.0
     return num / den
 
-def save_mrc(data, output_path, origin=(0,0,0), spacing=(1,1,1)):
+def save_mrc(data: np.ndarray, output_path: str, origin: tuple[float, float, float] = (0.0, 0.0, 0.0), spacing: tuple[float, float, float] = (1.0, 1.0, 1.0)) -> None:
     """
-    Save numpy array to MRC file.
+    Save numpy array to an MRC file.
+
+    Args:
+        data (numpy.ndarray): The 3D density map to save.
+        output_path (str): Path to the output MRC file.
+        origin (tuple, optional): The origin coordinates (x, y, z). Defaults to (0, 0, 0).
+        spacing (tuple, optional): The voxel size in Angstroms (x, y, z). Defaults to (1, 1, 1).
     """
     with mrcfile.new(output_path, overwrite=True) as mrc:
         mrc.set_data(data.astype(np.float32))

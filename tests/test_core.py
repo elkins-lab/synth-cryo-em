@@ -1,7 +1,7 @@
 import unittest
 import os
 import numpy as np
-from synth_cryo_em.core import generate_density_map, apply_ctf, add_gaussian_noise
+from synth_cryo_em.core import generate_density_map, apply_ctf, add_gaussian_noise, compute_ccc
 
 class TestSynthCryoEM(unittest.TestCase):
     def setUp(self):
@@ -108,6 +108,14 @@ END
         finally:
             if os.path.exists(test_mrc):
                 os.remove(test_mrc)
+
+    def test_compute_ccc_zero_den(self):
+        # Create an array of constant values
+        data1 = np.ones((5, 5, 5))
+        data2 = np.ones((5, 5, 5))
+        # This will result in 0 variance -> den == 0
+        ccc = compute_ccc(data1, data2)
+        self.assertEqual(ccc, 0.0)
 
 if __name__ == '__main__':
     unittest.main()

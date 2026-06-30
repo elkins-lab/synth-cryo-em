@@ -288,6 +288,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#map-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Map Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Map Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validation-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -420,6 +448,34 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#map-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Map Validation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Map Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#validation-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Validation Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -503,6 +559,27 @@
 <td><code>--apply-physics</code></td>
 <td>Enable CTF effects</td>
 <td>False</td>
+</tr>
+</tbody>
+</table>
+<h2 id="map-validation">Map Validation</h2>
+<p>The package also includes <code>synth-cryo-em-validate</code>, a tool to compare two Cryo-EM maps and compute their Cross-Correlation Coefficient (CCC) and Fourier Shell Correlation (FSC) curves.</p>
+<pre><code class="language-bash">synth-cryo-em-validate map1.mrc map2.mrc --output fsc_results.csv
+</code></pre>
+<h3 id="validation-options">Validation Options</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+<th>Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--output</code> / <code>-o</code></td>
+<td>Path to save FSC data (CSV)</td>
+<td>None</td>
 </tr>
 </tbody>
 </table>

@@ -1,47 +1,67 @@
 import os
-import unittest
+
+
+import mrcfile
+import numpy as np
 from click.testing import CliRunner
+
 from synth_cryo_em.cli import main
 
-class TestCLI(unittest.TestCase):
-    def setUp(self):
-        self.runner = CliRunner()
-        self.pdb_content = """ATOM      1  N   ALA A   1      11.104   6.132  11.469  1.00 20.00           N  
-ATOM      2  CA  ALA A   1      12.000  12.000  12.000  1.00 20.00           C  
-ATOM      3  C   ALA A   1      13.104  18.132  13.469  1.00 20.00           C  
-TER
-END
-"""
-        self.test_pdb = "test_cli.pdb"
-        with open(self.test_pdb, "w") as f:
-            f.write(self.pdb_content)
 
-    def tearDown(self):
-        if os.path.exists(self.test_pdb):
-            os.remove(self.test_pdb)
-        if os.path.exists("out.mrc"):
-            os.remove("out.mrc")
+def test_cli_basic() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        # Create a dummy PDB file
+        with open("test.pdb", "w") as f:
+            f.write(
+                "ATOM      1  CA  ALA A   1      10.000  10.000  10.000  1.00 20.00           C\n"
+            )
 
-    def test_basic_generation(self):
-        result = self.runner.invoke(main, [self.test_pdb, "out.mrc"])
-        self.assertEqual(result.exit_code, 0)
-        self.assertTrue(os.path.exists("out.mrc"))
+        result = runner.invoke(main, ["test.pdb", "output.mrc", "--resolution", "4.0"])
+        assert result.exit_code == 0
+        assert os.path.exists("output.mrc")
 
-    def test_with_options(self):
-        result = self.runner.invoke(main, [
-            self.test_pdb, "out.mrc",
-            "--resolution", "5.0",
-            "--spacing", "1.5",
-            "--snr", "10",
-            "--apply-physics",
-            "--defocus", "1.5",
-            "--voltage", "300",
-            "--cs", "2.7",
-            "--bfactor", "50.0",
-            "--bfactors"
-        ])
-        self.assertEqual(result.exit_code, 0)
-        self.assertTrue(os.path.exists("out.mrc"))
+        with mrcfile.open("output.mrc") as mrc:
+            assert mrc.data.shape != (0, 0, 0)
+            assert np.sum(mrc.data) > 0
 
-if __name__ == '__main__':
-    unittest.main()
+
+def test_cli_with_physics_and_noise() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open("test.pdb", "w") as f:
+            f.write(
+                "ATOM      1  CA  ALA A   1      10.000  10.000  10.000  1.00 20.00           C\n"
+            )
+
+        result = runner.invoke(
+            main,
+            [
+                "test.pdb",
+                "output.mrc",
+                "--resolution",
+                "4.0",
+                "--snr",
+                "10",
+                "--apply-physics",
+                "--defocus",
+                "1.5",
+                "--bfactors",
+            ],
+        )
+        assert result.exit_code == 0
+        assert os.path.exists("output.mrc")
+
+
+def test_cli_invalid_resolution() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        with open("test.pdb", "w") as f:
+            f.write(
+                "ATOM      1  CA  ALA A   1      10.000  10.000  10.000  1.00 20.00           C\n"
+            )
+
+        # Negative resolution should trigger ValueError and be caught by the CLI
+        result = runner.invoke(main, ["test.pdb", "output.mrc", "--resolution", "-1.0"])
+        assert result.exit_code != 0
+        assert "Error: Resolution must be positive" in result.output

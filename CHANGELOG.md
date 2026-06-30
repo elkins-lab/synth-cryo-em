@@ -23,5 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Standardized all Python docstrings in `core.py`, `cli.py`, and `validate.py` to use Google-style docstrings.
 - Updated `api.md` so that the validation module is properly rendered in MKDocs.
 
+## [0.1.2] - 2026-06-07
+
+### Changed
+- Maintenance release: General updates, dependency pins, and CI/CD workflow improvements.
+
 ## [0.1.0] - Initial Release
 - Initial release of the `synth-cryo-em` utility.

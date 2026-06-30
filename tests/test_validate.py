@@ -1,53 +1,75 @@
 import os
-import unittest
-import numpy as np
+
+
 import mrcfile
+import numpy as np
 from click.testing import CliRunner
+
 from synth_cryo_em.validate import main
 
-class TestValidate(unittest.TestCase):
-    def setUp(self):
-        self.runner = CliRunner()
-        self.map1 = "val_map1.mrc"
-        self.map2 = "val_map2.mrc"
-        self.map3 = "val_map3.mrc"
-        self.csv_out = "val_out.csv"
-        
-        np.random.seed(42)
-        data1 = np.random.rand(10, 10, 10).astype(np.float32)
-        with mrcfile.new(self.map1, overwrite=True) as m:
-            m.set_data(data1)
-            m.voxel_size = 1.0
-            
-        with mrcfile.new(self.map2, overwrite=True) as m:
-            m.set_data(data1)
-            m.voxel_size = 1.0
-            
-        data3 = np.random.rand(5, 5, 5).astype(np.float32)
-        with mrcfile.new(self.map3, overwrite=True) as m:
-            m.set_data(data3)
-            m.voxel_size = 1.0
 
-    def tearDown(self):
-        for f in [self.map1, self.map2, self.map3, self.csv_out]:
-            if os.path.exists(f):
-                os.remove(f)
+def create_dummy_mrc(path: str, data: np.ndarray) -> None:
+    with mrcfile.new(path, overwrite=True) as mrc:
+        mrc.set_data(data.astype(np.float32))
+        mrc.voxel_size = (1.0, 1.0, 1.0)
 
-    def test_basic_validation(self):
-        result = self.runner.invoke(main, [self.map1, self.map2])
-        self.assertEqual(result.exit_code, 0)
-        self.assertIn("Comparing", result.output)
-        self.assertIn("CCC", result.output)
 
-    def test_validation_different_shapes(self):
-        result = self.runner.invoke(main, [self.map1, self.map3])
-        self.assertEqual(result.exit_code, 0)
-        self.assertIn("Error: Maps have different shapes", result.output)
+def test_validate_basic() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        data1 = np.random.rand(20, 20, 20).astype(np.float32)
+        data2 = data1 + np.random.normal(0, 0.1, (20, 20, 20)).astype(np.float32)
 
-    def test_validation_with_output(self):
-        result = self.runner.invoke(main, [self.map1, self.map2, "--output", self.csv_out])
-        self.assertEqual(result.exit_code, 0)
-        self.assertTrue(os.path.exists(self.csv_out))
+        create_dummy_mrc("map1.mrc", data1)
+        create_dummy_mrc("map2.mrc", data2)
 
-if __name__ == '__main__':
-    unittest.main()
+        result = runner.invoke(main, ["map1.mrc", "map2.mrc"])
+        assert result.exit_code == 0
+        assert "Overall Cross-Correlation Coefficient" in result.output
+        assert "Resolution (A)" in result.output
+
+
+def test_validate_output_csv() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        data1 = np.random.rand(20, 20, 20).astype(np.float32)
+        data2 = data1.copy()
+
+        create_dummy_mrc("map1.mrc", data1)
+        create_dummy_mrc("map2.mrc", data2)
+
+        result = runner.invoke(main, ["map1.mrc", "map2.mrc", "--output", "fsc.csv"])
+        assert result.exit_code == 0
+        assert os.path.exists("fsc.csv")
+
+        # Check if CSV has content
+        fsc_data = np.loadtxt("fsc.csv", delimiter=",")
+        assert fsc_data.shape[1] == 2
+
+
+def test_validate_identical() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        data = np.random.rand(20, 20, 20).astype(np.float32)
+        create_dummy_mrc("map1.mrc", data)
+        create_dummy_mrc("map2.mrc", data)
+
+        result = runner.invoke(main, ["map1.mrc", "map2.mrc"])
+        assert result.exit_code == 0
+        assert "Overall Cross-Correlation Coefficient (CCC): 1.0000" in result.output
+
+
+def test_validate_mismatched_shapes_value_error() -> None:
+    runner = CliRunner()
+    with runner.isolated_filesystem():
+        # Maps with different shapes
+        data1 = np.zeros((10, 10, 10), dtype=np.float32)
+        data2 = np.zeros((10, 10, 11), dtype=np.float32)
+
+        create_dummy_mrc("map1.mrc", data1)
+        create_dummy_mrc("map2.mrc", data2)
+
+        # compute_ccc will raise ValueError due to shape mismatch
+        result = runner.invoke(main, ["map1.mrc", "map2.mrc"])
+        assert result.exit_code != 0
+        assert "Error: Maps have different shapes" in result.output

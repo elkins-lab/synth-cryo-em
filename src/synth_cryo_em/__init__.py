@@ -11,9 +11,7 @@ except PackageNotFoundError:
 
 from .core import (
     generate_density_map,
-    add_gaussian_noise,
     apply_ctf,
-    compute_fsc,
     compute_ccc,
     save_mrc
 )

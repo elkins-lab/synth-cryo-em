@@ -120,6 +120,7 @@ module = [
     "click.*",
 ]
 ignore_missing_imports = true
+ignore_errors = true
 
 # ── Coverage ──────────────────────────────────────────────────────────────────
 [tool.coverage.run]

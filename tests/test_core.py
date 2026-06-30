@@ -3,7 +3,9 @@ import unittest
 
 import numpy as np
 from synth_core import add_gaussian_noise
-from synth_cryo_em.core import apply_ctf, generate_density_map, compute_ccc
+
+from synth_cryo_em.core import apply_ctf, compute_ccc, generate_density_map
+
 
 class TestSynthCryoEM(unittest.TestCase):
     def setUp(self) -> None:

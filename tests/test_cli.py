@@ -1,6 +1,5 @@
 import os
 
-
 import mrcfile
 import numpy as np
 from click.testing import CliRunner
